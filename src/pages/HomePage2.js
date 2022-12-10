@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../components/Header';
+import Header2 from '../components/Header2';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -21,7 +21,7 @@ const HomePage = () => {
 
     return (
     <div className='h-screen'>
-        <div> <Header></Header> </div>        
+        <div> <Header2></Header2> </div>        
         <div className='flex  items-center  py-16 px-28 bg-white'>
             <div className='flex flex-1 justify-center'>
                 <div className=''>
@@ -39,7 +39,7 @@ const HomePage = () => {
         {/* now showing start */}
         <div className='bg-zinc-100 py-16 px-28' >
             <div className='flex mb-20'>
-                <div className='border-b-2 border-black-700 pb-4'>
+                <div className='border-b-2 border-black-500 pb-4'>
                     <span className='text-[24px] font-bold text-black-500'>Now Showing</span>
                 </div>
                 <div className='flex-1'></div>
@@ -128,7 +128,7 @@ const HomePage = () => {
                 </div>
                 <div className='mb-8'>
                     <form  action="">
-                        <input className='border-2 border-zinc-900 rounded h-[40px] w-[300px] py-1 pl-3' type="text" id="new-member" name="new-member" placeholder="Type your email" />
+                        <input className='border-2 border-zinc-900 rounded h-[40px] w-[300px] py-1 pl-3' type="text" id="new-member" name="new-member" placeholder="Type your email"/>
                         <button className='bg-zinc-300 border border  rounded-md p-2 text-black ml-4 font-inter'>Join Now</button>
                     </form>
                 </div>
