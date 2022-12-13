@@ -1,19 +1,20 @@
 import React from 'react'
 import Header2 from '../components/Header2';
 import Footer from '../components/Footer';
+import BorderListCinemas from '../components/BorderListCinema';
 
 const MovieDetails = () => {
     return (
         <div>
             <div> <Header2></Header2> </div>
-            <div className='grid grid-cols-[350px_minmax(900px,_1fr)_100px] pt-[40px] pb-[96px]'>
-                <div className=' ml-[70px] h-[160px] border border-2 rounded-2xl w-[320px] h-[440px]'>
+            <div className='grid grid-cols-[400px_minmax(900px,_1fr)_100px] pt-[40px] pb-[96px]'>
+                <div className=' ml-[110px] h-[160px] border border-2 rounded-2xl w-[320px] h-[440px]'>
                     <div className=''>
                         <img className='p-10' src={require('../assets/images/spiderman.png')} alt="mv-spiderman"/>
                     </div>
                 </div>
 
-                <div className='pl-[80px]'>
+                <div className='pl-[80px] pr-5'>
 
                     <div>
                         <div>
@@ -46,377 +47,122 @@ const MovieDetails = () => {
                 </div>
             </div>
 
-            <section class="showtimes">
-            <div>
-                <div className='bg-[#F5F6F8]'>
-                    <h2>Showtimes and Tickets</h2>
-                    <div class="dt-select">
-                        <input type="date" name="dates" id="dates" placeholder="" />
-                        <select name="city-select" id="city-select">Purwokerto</select>
+            <section className=''>
+            <div className=''>
+                <div className='bg-[#F5F6F8] '>
+                    <h2 className='flex justify-center items-center font-mulish font-bold text-xl pt-[70px] pb-[40px]'>Showtimes and Tickets</h2>
+                    <div className='flex justify-center items-center pb-[72px]'>
+                        <input className='mr-5 border border-2 rounded-lg w-[200px] h-[35px] p-5' type="date" name="dates" id="dates" placeholder="10/22/2022" />
+                        <select className='mr-5 border border-2 rounded-lg w-[200px] h-[35px] p-5' name="city-select" id="city-select">Purwokerto</select>
                     </div>
-                    <div class="list-time">
-                        <div class="list-time-border">
-                            <img src="./asset/assets/ebv-logo.png" alt="ebv-logo" />
-                            <div class="title-lt">
-                                <h3>ebv.id</h3>
-                                <p>Whatever street No.12, South Purwokerto</p>
+                    
+                    <div className='inline-block'>
+                        <div className='rounded-lg w-[320px] h-[300px] bg-white ml-[110px]'>
+                            <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
+                                <div className='pt-3'>
+                                    <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
+                                </div>
+                                <div className='pl-5'>
+                                    <h3 className='font-mulish text-xl font-bold pb-1'>ebv.id</h3>
+                                    <p className='font-mulish text-xs text-[#6E7191] w-[162px]'>Whatever street No.12, South Purwokerto</p>
+                                </div>
                             </div>
                             <hr />
-                            <div class="time-lt">
-                                <div class="border-time-lt">
-                                    <p>
-                                        8.30 am
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        10.30 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt actv">
-                                    <p>
-                                        12.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        02.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        4.30 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt actv">
-                                    <p>
-                                        7.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        8.30 pm
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="price">
-                                <div class="price-ttl">
-                                    <p>Price</p>
-                                    <p>$10.00/seat</p>
-                                </div>
-                            </div>
-                            <div class="btn-booknow">
-                                <button type="submit">
-                                    Book Now</button>
-                            </div>
+                        <div><BorderListCinemas></BorderListCinemas></div>
                         </div>
                     </div>
 
-                    <div class="list-time">
-                        <div class="list-time-border">
-                            <img src="./asset/assets/cine-logo.png" alt="ebv-logo" />
-                            <div class="title-lt">
-                                <h3>CineOne21</h3>
-                                <p>Whatever street No.12, South Purwokerto</p>
+                    <div className='inline-block pt-10 pl-7'>
+                        <div className='rounded-lg w-[320px] h-[300px] bg-white ml-[110px]'>
+                            <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
+                                <div className='pt-3'>
+                                    <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
+                                </div>
+                                <div className='pl-5'>
+                                    <h3 className='font-mulish text-xl font-bold pb-1'>ebv.id</h3>
+                                    <p className='font-mulish text-xs text-[#6E7191] w-[162px]'>Whatever street No.12, South Purwokerto</p>
+                                </div>
                             </div>
                             <hr />
-                            <div class="time-lt">
-                                <div class="border-time-lt">
-                                    <p>
-                                        8.30 am
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        10.30 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt actv">
-                                    <p>
-                                        12.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        02.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        4.30 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt actv">
-                                    <p>
-                                        7.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        8.30 pm
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="price">
-                                <div class="price-ttl">
-                                    <p>Price</p>
-                                    <p>$10.00/seat</p>
-                                </div>
-                            </div>
-                            <div class="btn-booknow">
-                                <button type="submit">
-                                    Book Now
-                                </button>
-                            </div>
+                        <div><BorderListCinemas></BorderListCinemas></div>
                         </div>
                     </div>
 
-                    <div class="list-time">
-                        <div class="list-time-border">
-                            <img src="./asset/assets/hiflix-logo.png" alt="ebv-logo" />
-                            <div class="title-lt">
-                                <h3>hiflix Cinema</h3>
-                                <p>Whatever street No.12, South Purwokerto</p>
+                    <div className='inline-block pt-10 pl-7'>
+                        <div className='rounded-lg w-[320px] h-[300px] bg-white ml-[110px]'>
+                            <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
+                                <div className='pt-3'>
+                                    <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
+                                </div>
+                                <div className='pl-5'>
+                                    <h3 className='font-mulish text-xl font-bold pb-1'>ebv.id</h3>
+                                    <p className='font-mulish text-xs text-[#6E7191] w-[162px]'>Whatever street No.12, South Purwokerto</p>
+                                </div>
                             </div>
                             <hr />
-                            <div class="time-lt">
-                                <div class="border-time-lt">
-                                    <p>
-                                        8.30 am
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        10.30 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt actv">
-                                    <p>
-                                        12.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        02.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        4.30 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt actv">
-                                    <p>
-                                        7.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        8.30 pm
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="price">
-                                <div class="price-ttl">
-                                    <p>Price</p>
-                                    <p>$10.00/seat</p>
-                                </div>
-                            </div>
-                            <div class="btn-booknow">
-                                <button type="submit">
-                                    Book Now
-                                </button>
-                            </div>
+                        <div><BorderListCinemas></BorderListCinemas></div>
                         </div>
                     </div>
 
-                    <div class="list-time">
-                        <div class="list-time-border">
-                            <img src="./asset/assets/ebv-logo.png" alt="ebv-logo" />
-                            <div class="title-lt">
-                                <h3>ebv.id</h3>
-                                <p>Whatever street No.12, South Purwokerto</p>
+                    <div className='inline-block pt-10'>
+                        <div className='rounded-lg w-[320px] h-[300px] bg-white ml-[110px]'>
+                            <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
+                                <div className='pt-3'>
+                                    <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
+                                </div>
+                                <div className='pl-5'>
+                                    <h3 className='font-mulish text-xl font-bold pb-1'>ebv.id</h3>
+                                    <p className='font-mulish text-xs text-[#6E7191] w-[162px]'>Whatever street No.12, South Purwokerto</p>
+                                </div>
                             </div>
                             <hr />
-                            <div class="time-lt">
-                                <div class="border-time-lt">
-                                    <p>
-                                        8.30 am
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        10.30 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt actv">
-                                    <p>
-                                        12.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        02.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        4.30 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt actv">
-                                    <p>
-                                        7.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        8.30 pm
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="price">
-                                <div class="price-ttl">
-                                    <p>Price</p>
-                                    <p>$10.00/seat</p>
-                                </div>
-                            </div>
-                            <div class="btn-booknow">
-                                <button type="submit">
-                                    Book Now
-                                </button>
-                            </div>
+                        <div><BorderListCinemas></BorderListCinemas></div>
                         </div>
                     </div>
 
-                    <div class="list-time">
-                        <div class="list-time-border">
-                            <img src="./asset/assets/cine-logo.png" alt="ebv-logo" />
-                            <div class="title-lt">
-                                <h3>CineOne21</h3>
-                                <p>Whatever street No.12, South Purwokerto</p>
+                    <div className='inline-block pt-10 pl-7'>
+                        <div className='rounded-lg w-[320px] h-[300px] bg-white ml-[110px]'>
+                            <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
+                                <div className='pt-3'>
+                                    <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
+                                </div>
+                                <div className='pl-5'>
+                                    <h3 className='font-mulish text-xl font-bold pb-1'>ebv.id</h3>
+                                    <p className='font-mulish text-xs text-[#6E7191] w-[162px]'>Whatever street No.12, South Purwokerto</p>
+                                </div>
                             </div>
                             <hr />
-                            <div class="time-lt">
-                                <div class="border-time-lt">
-                                    <p>
-                                        8.30 am
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        10.30 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt actv">
-                                    <p>
-                                        12.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        02.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        4.30 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt actv">
-                                    <p>
-                                        7.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        8.30 pm
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="price">
-                                <div class="price-ttl">
-                                    <p>Price</p>
-                                    <p>$10.00/seat</p>
-                                </div>
-                            </div>
-                            <div class="btn-booknow">
-                                <button type="submit">
-                                    Book Now
-                                </button>
-                            </div>
+                        <div><BorderListCinemas></BorderListCinemas></div>
                         </div>
                     </div>
 
-                    <div class="list-time">
-                        <div class="list-time-border">
-                            <img src="./asset/assets/hiflix-logo.png" alt="ebv-logo" />
-                            <div class="title-lt">
-                                <h3>hiflix Cinema</h3>
-                                <p>Whatever street No.12, South Purwokerto</p>
+                    <div className='inline-block pt-10 pl-7'>
+                        <div className='rounded-lg w-[320px] h-[300px] bg-white ml-[110px]'>
+                            <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
+                                <div className='pt-3'>
+                                    <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
+                                </div>
+                                <div className='pl-5'>
+                                    <h3 className='font-mulish text-xl font-bold pb-1'>ebv.id</h3>
+                                    <p className='font-mulish text-xs text-[#6E7191] w-[162px]'>Whatever street No.12, South Purwokerto</p>
+                                </div>
                             </div>
                             <hr />
-                            <div class="time-lt">
-                                <div class="border-time-lt">
-                                    <p>
-                                        8.30 am
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        10.30 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt actv">
-                                    <p>
-                                        12.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        02.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        4.30 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt actv">
-                                    <p>
-                                        7.00 pm
-                                    </p>
-                                </div>
-                                <div class="border-time-lt">
-                                    <p>
-                                        8.30 pm
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="price">
-                                <div class="price-ttl">
-                                    <p>Price</p>
-                                    <p>$10.00/seat</p>
-                                </div>
-                            </div>
-                            <div class="btn-booknow">
-                                <button type="submit">
-                                    Book Now
-                                </button>
-                            </div>
+                        <div><BorderListCinemas></BorderListCinemas></div>
                         </div>
                     </div>
+
                 </div>
             </div>
+        </section>
 
-            <div class="bottom-line actived">
-                <div class="line"><hr /></div>
-                <div>View More</div>
-                <div class="line"><hr /></div>
+            <div className='flex bg-[#F5F6F8] pt-[50px] pb-[50px]'>
+                <div className='flex-1 pt-[10px] pl-[110px]'><hr /></div>
+                <div className='font-mulish text-sm pl-10 pr-10'>view more</div>
+                <div className='flex-1 pt-[10px] pr-[110px]'><hr /></div>
             </div>
 
         <div> <Footer></Footer> </div>
-        </section>
         </div>
     )
 };

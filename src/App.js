@@ -8,6 +8,13 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ListMovie from "./pages/ListMovie";
 import MovieDetails from "./pages/MovieDetails";
+import OrderPage from "./pages/OrderPage";
+import PaymentPage from "./pages/PaymentPage";
+import ProfilePage from "./pages/ProfilePage";
+import OrderHistory from "./pages/OrderHistory";
+import TicketResultActived from "./pages/TicketResultActived";
+import TicketResultUsed from "./pages/TicketResultUsed";
+import TicketResultExpired from "./pages/TicketResultExpired";
 
 const App = ()=>{
   return (
@@ -21,6 +28,13 @@ const App = ()=>{
         <Route path="/Resetpwd" element={<ResetPassword />} />
         <Route path="/Listmovie" element={<ListMovie />} />
         <Route path="/MovieDetails" element={<MovieDetails />} />
+        <Route path="/OrderPage" element={<OrderPage />} />
+        <Route path="/PaymentPage" element={<PaymentPage />} />
+        <Route path="/ProfilePage" element={<ProfilePage />} />
+        <Route path="/OrderHistory" element={<OrderHistory />} />
+        <Route path="/TicketResultActived" element={<TicketResultActived />} />
+        <Route path="/TicketResultUsed" element={<TicketResultUsed />} />
+        <Route path="/TicketResultExpired" element={<TicketResultExpired />} />
       </Routes>      
     </BrowserRouter>
   )

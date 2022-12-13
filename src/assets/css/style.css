@@ -1,0 +1,57 @@
+.overlay-ticket-result{ 
+    @apply pt-44 pr-48 pb-44 pl-48 bg-[#F5F6F8];
+    }
+    
+    .ticket-result>div:nth-child(1){ 
+    @apply font-bold text-[24px] text-center mb-12 text-black;
+    }
+    
+    .overlay-ticket{ 
+    @apply flex border rounded-lg;
+    }
+    .left-side-ticket{ 
+    @apply flex-1;
+    }
+    .right-side-ticket{ 
+    @apply flex flex-col border-l-2 /* border-left-2 */ border-dashed border-zinc-900 ;
+    }
+    
+    .header-ticket{ 
+    @apply bg-zinc-400 flex text-black pt-6 pr-14 pb-6 pl-14 h-[75px] items-center rounded ;
+    }
+    
+    .header-ticket>div:nth-child(1){ 
+    @apply flex-1 ;
+    }
+    
+    .header-ticket>div:nth-child(2){ 
+    @apply font-bold text-[18px] ;
+    }
+    
+    .detail-ticket{ 
+    @apply flex pt-10 pr-14 pb-0 pl-14 justify-items-center ;
+    }
+    
+    .detail-ticket>div{ 
+    @apply flex-1 ;
+    }
+    
+    .detail-ticket>div>div:nth-child(1){ 
+    @apply font-normal text-[12px] text-black;
+    }
+    
+    .detail-ticket>div>div:nth-child(2){ 
+    @apply font-bold text-[16px] text-black ;
+    }
+    
+    .detail-ticket .price-detail-ticket>div:nth-child(2){ 
+    @apply font-bold ;
+    }
+    
+    .overlay-qr{ 
+    @apply flex flex-1 ;
+    }
+    
+    .qr-code{ 
+    @apply justify-center items-center flex flex-1 ;
+    }
