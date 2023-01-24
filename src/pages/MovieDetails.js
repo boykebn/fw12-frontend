@@ -7,8 +7,8 @@ const MovieDetails = () => {
     return (
         <div>
             <div> <Header2></Header2> </div>
-            <div className='grid grid-cols-[400px_minmax(900px,_1fr)_100px] pt-[40px] pb-[96px]'>
-                <div className=' ml-[110px] h-[160px] border border-2 rounded-2xl w-[320px] h-[440px]'>
+            <div className='grid grid-cols-[400px_minmax(900px,_1fr)_100px] pt-[40px] pb-[96px] bg-[#A6BB8D]'>
+                <div className=' ml-[110px] h-[160px] border-2 rounded-2xl w-[320px] h-[440px]'>
                     <div className=''>
                         <img className='p-10' src={require('../assets/images/spiderman.png')} alt="mv-spiderman"/>
                     </div>
@@ -49,7 +49,7 @@ const MovieDetails = () => {
 
             <section className=''>
             <div className=''>
-                <div className='bg-[#F5F6F8] '>
+                <div className='bg-[#EAE7B1] '>
                     <h2 className='flex justify-center items-center font-mulish font-bold text-xl pt-[70px] pb-[40px]'>Showtimes and Tickets</h2>
                     <div className='flex justify-center items-center pb-[72px]'>
                         <input className='mr-5 border border-2 rounded-lg w-[200px] h-[35px] p-5' type="date" name="dates" id="dates" placeholder="10/22/2022" />
@@ -57,7 +57,7 @@ const MovieDetails = () => {
                     </div>
                     
                     <div className='inline-block'>
-                        <div className='rounded-lg w-[320px] h-[300px] bg-white ml-[110px]'>
+                        <div className='rounded-lg w-[320px] h-[300px] bg-[#A6BB8D] ml-[110px]'>
                             <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
                                 <div className='pt-3'>
                                     <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
@@ -73,7 +73,7 @@ const MovieDetails = () => {
                     </div>
 
                     <div className='inline-block pt-10 pl-7'>
-                        <div className='rounded-lg w-[320px] h-[300px] bg-white ml-[110px]'>
+                        <div className='rounded-lg w-[320px] h-[300px] bg-[#A6BB8D] ml-[110px]'>
                             <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
                                 <div className='pt-3'>
                                     <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
@@ -89,7 +89,7 @@ const MovieDetails = () => {
                     </div>
 
                     <div className='inline-block pt-10 pl-7'>
-                        <div className='rounded-lg w-[320px] h-[300px] bg-white ml-[110px]'>
+                        <div className='rounded-lg w-[320px] h-[300px] bg-[#A6BB8D] ml-[110px]'>
                             <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
                                 <div className='pt-3'>
                                     <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
@@ -105,7 +105,7 @@ const MovieDetails = () => {
                     </div>
 
                     <div className='inline-block pt-10'>
-                        <div className='rounded-lg w-[320px] h-[300px] bg-white ml-[110px]'>
+                        <div className='rounded-lg w-[320px] h-[300px] bg-[#A6BB8D] ml-[110px]'>
                             <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
                                 <div className='pt-3'>
                                     <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
@@ -121,7 +121,7 @@ const MovieDetails = () => {
                     </div>
 
                     <div className='inline-block pt-10 pl-7'>
-                        <div className='rounded-lg w-[320px] h-[300px] bg-white ml-[110px]'>
+                        <div className='rounded-lg w-[320px] h-[300px] bg-[#A6BB8D] ml-[110px]'>
                             <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
                                 <div className='pt-3'>
                                     <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
@@ -137,7 +137,7 @@ const MovieDetails = () => {
                     </div>
 
                     <div className='inline-block pt-10 pl-7'>
-                        <div className='rounded-lg w-[320px] h-[300px] bg-white ml-[110px]'>
+                        <div className='rounded-lg w-[320px] h-[300px] bg-[#A6BB8D] ml-[110px]'>
                             <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
                                 <div className='pt-3'>
                                     <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
@@ -156,10 +156,10 @@ const MovieDetails = () => {
             </div>
         </section>
 
-            <div className='flex bg-[#F5F6F8] pt-[50px] pb-[50px]'>
-                <div className='flex-1 pt-[10px] pl-[110px]'><hr /></div>
+            <div className='flex bg-[#EAE7B1] pt-[50px] pb-[50px]'>
+                <div className='flex-1 pt-[10px] pl-[110px]'><hr className='border-[#61876E]' /></div>
                 <div className='font-mulish text-sm pl-10 pr-10'>view more</div>
-                <div className='flex-1 pt-[10px] pr-[110px]'><hr /></div>
+                <div className='flex-1 pt-[10px] pr-[110px]'><hr className='border-[#61876E]' /></div>
             </div>
 
         <div> <Footer></Footer> </div>

@@ -6,21 +6,21 @@ import { Youtube } from 'react-feather';
 
 const Footer = () => {
     return (
-        <footer className='flex-col pt-24 px-28 pb-0 text-black-500 bg-zinc-200'>
-            <div className='flex'>
-                <div className='flex-1 text-base leading-8 tracking-wide mr-8'>
+        <footer className='pt-24 px-28 pb-0 text-black-500 bg-[#A6BB8D]'>
+            <div className='flex gap-44'>
+                <div className='text-base leading-8 tracking-wide mr-8'>
                     <div className='mb-7'>
-                        <img className='' src={require('../assets/images/logo.png')} alt="footer logo"/>
+                        <img className='' src={require('../assets/images/logo-eastick.png')} alt="footer logo" width="150" height="150" />
                     </div>
                     <p className=''>Stop waiting in line. Buy tickets</p>
                     <p className=''>conveniently, watch movies quietly.</p>
                 </div>
-                <div className='flex-1'>
+                <div className=''>
                     <div className='font-bold mb-7 '>Explore</div>
                     <p className='mb-3.5'>Home</p>
                     <p className=''>List Movie</p>
                 </div>
-                <div className='flex-1'>
+                <div className=''>
                     <div className='font-bold mb-7 '>Our Sponsor</div>                
                     <div className='mb-6'>
                         <img src={require('../assets/images/ebv-logo.png')} alt="ebuid"/>
@@ -53,7 +53,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className='flex justify-center align-center pt-16 pb-5' >
-                <span>© 2022 Eastick. All Rights Reserved.</span>
+                <span>© 2023 Eastick. All Rights Reserved.</span>
             </div>
         </footer>
     )
