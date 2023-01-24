@@ -5,17 +5,26 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const HomePage = () => {
-    const [ dataMovies, setDataMovies ] = React.useState({});
+    const [ dataUpcoming, setDataUpcoming ] = React.useState({});
+    const [ dataNowshowing, setDataNowshowing ] = React.useState({});
 
     React.useEffect (() => {
-        getData().then((data) => {
-            setDataMovies(data);
+        getUpcoming().then((data) => {
+            setDataUpcoming(data);
+        });
+        getNowshowing().then((data) => {
+            setDataNowshowing(data);
         });
     }, [])
 
-    // get data movie tittle and images
-    const getData = async () => {
-        const { data } = await axios.get('https://api.themoviedb.org/3/movie/upcoming?api_key=6984d06ddd66235d316ee35dc44ac611');
+    // get data movie Up Coming
+    const getUpcoming = async () => {
+        const { data } = await axios.get('http://localhost:8888/movies/upcoming?page=1&limit=10');
+        return data;
+    };
+
+    const getNowshowing = async () => {
+        const { data } = await axios.get('http://localhost:8888/movies/nowShowing');
         return data;
     };
 
@@ -48,22 +57,22 @@ const HomePage = () => {
                 </div>
             </div>
             <div className='text-black-500 whitespace-nowrap overflow-scroll pb-5 overflow-y-hidden'>
-                {dataMovies?.results?.map((movies) => (
+                {dataNowshowing?.results?.map((movies) => (
                     <div className='inline-block text-center border-2 border-gray-300 rounded-lg p-8 mr-6 w-[220px] h-[450]'>
                         <div>   
-                            <img className='mb-2' src={'https://image.tmdb.org/t/p/w200' + movies.poster_path} alt="Black Widow"/>
+                            <img className='mb-2' src={movies.pictures} alt="Black Widow"/>
                         </div>
                         <div className='whitespace-normal'>
-                            <h4 className='font-bold text-[18px] mb-2'>{movies.title}</h4>
+                            <h4 className='font-bold text-[18px] mb-2'>{movies.MovieTitle}</h4>
                         </div>
                         <div>
-                            <p className='text-[14px] text-center mb-6'>{movies.genre_ids}</p>
+                            <p className='text-[14px] text-center mb-6'>{movies.genre}</p>
                         </div>
                         <Link to='/'>
                             <button className='border-2 border-black-500 rounded-lg py-1 px-9'>Details</button>
                         </Link>
                     </div>
-                ))};
+                ))}
             </div>
         </div>
         {/* now showing end */}
@@ -100,22 +109,22 @@ const HomePage = () => {
             {/* card of movies */}
 
             <div className='text-black-500 whitespace-nowrap overflow-scroll pb-5 overflow-y-hidden'>
-                {dataMovies?.results?.map((movies) => (
+                {dataUpcoming?.results?.map((movies) => (
                     <div className='inline-block text-center border-2 border-gray-300 rounded-lg p-8 mr-6 w-[220px] h-[450]'>
                         <div>   
-                            <img className='mb-2' src={'https://image.tmdb.org/t/p/w200' + movies.poster_path} alt="Black Widow"/>
+                            <img className='mb-2' src={movies.pictures} alt="Black Widow"/>
                         </div>
                         <div className='whitespace-normal'>
-                            <h4 className='font-bold text-[18px] mb-2'>{movies.title}</h4>
+                            <h4 className='font-bold text-[18px] mb-2'>{movies.MovieTitle}</h4>
                         </div>
                         <div>
-                            <p className='text-[14px] text-center mb-6'>{movies.genre_ids}</p>
+                            <p className='text-[14px] text-center mb-6'>{movies.genre}</p>
                         </div>
                         <Link to='/'>
                             <button className='border-2 border-black-500 rounded-lg py-1 px-9'>Details</button>
                         </Link>
                     </div>
-                ))};
+                ))}
             </div>
         </div>
         {/* upcoming end */}
