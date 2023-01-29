@@ -1,23 +1,41 @@
 import React  from "react";
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Link, useNavigate} from "react-router-dom"
-
-// import {login as loginAction} from '../redux/reducers/auth';
+import {Field, Form, Formik} from 'formik';
+import * as Yup from 'yup';
+import YupPasword from 'yup-password';
 import {loginAction} from './redux/action/auth'
+import { Eye, EyeOff } from "react-feather";
+YupPasword(Yup);
+
+// Validation Schema Formik
+const LoginSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required('Required'),
+  password: Yup.string()
+    .password()
+    .min(8, 'Min lenght 8')
+    .minLowercase(1, 'Min lowercase 1')
+    .minUppercase(1, 'Min uppercase 1')
+    .minSymbols(1, 'Min symbol 1')
+    .minNumbers(1, 'Min number 1')
+    .required('Required'),
+});
 
 const SignIn = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    // const [showAlert, setShowAlert] = React.useState(false);
+    const { isloading } = useSelector((state) => state.auth);
+    const { message } = useSelector((state) => state.auth);
+    const [showPassword, setShowPassword] = React.useState(false);
 
-    const loginReq = (event) => {
-        event.preventDefault()
-        const { value: email } = event.target.email
-        const { value: password } = event.target.password
-        dispatch(loginAction({email, password}))
-        navigate('/homepage')
+    const loginReq = (value) => {
+        dispatch(loginAction({value, cb}))
     };
+    
+    const cb = () => {
+      navigate("/");
+    }
 
     return (
         <div className="grid grid-cols-2">
@@ -49,35 +67,69 @@ const SignIn = () => {
                     your registration</div>
             </div>
 
-            {/* {showAlert && (<div className="bg-red-400 border border-red-700 rounded w-2/4 h-10 mt-3 ml-20 pl-5 text-center pt-1">
-                <span>wrong email or password!</span>
-            </div>)} */}
+            {message && (
+              <div className="p-4 bg-red-200 border-2 border-red-300 rounded-xl mb-5 text-center">
+                {message}
+              </div>
+            )}
 
-            <form onSubmit={loginReq}>
-                <div className="pl-20 pb-0 pt-12 text-base">
-                    <label for="email">Email</label>
-                </div>
-                <div className="pl-20 pb-0 pt-3">
-                    <input className="border border-[#DEDEDE] rounded-2xl h-12 w-3/4 pl-5" type="text" name="email" id="email" placeholder="Write your email"/>
-                </div>
-                <div className="pl-20 pb-0 pt-12 text-base">
-                    <label for="password">Password</label>
-                </div>
-                <div className="pl-20 pb-0 pt-3">
-                    <input className="border border-[#DEDEDE] rounded-2xl h-12 w-3/4 pl-5" type="password" name="password" id="password" placeholder="Write your password"/>
-                </div>
-                <div>
-                    <div className="pl-20 pb-0 pt-12 ">
-                        <button className="border rounded-2xl bg-[#61876E] hover:bg-[#3C6255] h-12 w-3/4 text-base font-inter text-white " type="submit">Sign In</button>
-                    </div>
-                    <div  className="flex justify-center items-center flex-col pt-5 pr-20 ">
-                        <span className="text-base text-[#8692A6]">Forgot your password ? {" "} <Link to="/Forgotpwd"
-                        className="underline underline-offset-4 text-[#61876E] hover:text-[#3C6255] font-medium">Reset Now</Link></span>
-                        <span className="text-base text-[#8692A6]">Don't have an account ? {" "} <Link to="/SignUp"
-                        className="underline underline-offset-4 text-[#61876E] hover:text-[#3C6255] font-medium">Sign Up</Link></span>
-                    </div>
-                </div>
-            </form>
+            <Formik
+            initialValues={{
+              email: '',
+              password: '',
+            }}
+            onSubmit={loginReq}
+            validationSchema={LoginSchema}>
+              {({errors, touched, dirty}) => (
+                <Form>
+                  <div className="pl-20 pb-0 pt-12 text-base">
+                      <label for="email">Email</label>
+                  </div>
+                  <div className="pl-20 pb-0 pt-3">
+                      <Field className="border border-[#DEDEDE] rounded-2xl h-12 w-3/4 pl-5" type="text" name="email" placeholder="Write your email" />
+                        {errors.email && touched.email ? (
+                          <div className="text-red-500">{errors.email}</div>
+                        ) : null}
+                  </div>
+                  <div className="pl-20 pb-0 pt-12 text-base">
+                      <label for="password">Password</label>
+                  </div>
+                  <div className="pl-20 pb-0 pt-3">
+                      <Field className="border border-[#DEDEDE] rounded-2xl h-12 w-3/4 pl-5" type={showPassword ? "text" : "password"} name="password" placeholder="Write your password"
+                      />
+                      {showPassword ? (
+                          <Eye
+                            className="absolute right-48 top-[445px]"
+                            onClick={() => setShowPassword(!showPassword)}
+                          />
+                        ) : (
+                          <EyeOff
+                            className="absolute right-48 top-[445px]"
+                            onClick={() => setShowPassword(!showPassword)}
+                          />
+                      )}
+                      {errors.password && touched.password ? (
+                        <div className="text-red-500">{errors.password}</div>
+                      ) : null}
+                  </div>
+                      <div className="pl-20 pb-0 pt-12 ">
+                            <button 
+                            className="border rounded-2xl bg-[#61876E] hover:bg-[#3C6255] h-12 w-3/4 text-base font-inter text-white" 
+                            type="submit"
+                            // disabled={!dirty || isloading}
+                            >
+                            Sign In
+                            </button>
+                      </div>
+                      <div  className="flex justify-center items-center flex-col pt-5 pr-20 ">
+                          <span className="text-base text-[#8692A6]">Forgot your password ? {" "} <Link to="/Forgotpwd"
+                          className="underline underline-offset-4 text-[#61876E] hover:text-[#3C6255] font-medium">Reset Now</Link></span>
+                          <span className="text-base text-[#8692A6]">Don't have an account ? {" "} <Link to="/SignUp"
+                          className="underline underline-offset-4 text-[#61876E] hover:text-[#3C6255] font-medium">Sign Up</Link></span>
+                      </div>
+              </Form>
+              )}
+            </Formik>
             </div>
         </div>
     )

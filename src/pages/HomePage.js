@@ -1,36 +1,45 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import Header from '../components/Header';
+import Header2 from '../components/Header2'
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import http from '../../src/helpers/http'
 
 const HomePage = () => {
-    const [ dataUpcoming, setDataUpcoming ] = React.useState({});
-    const [ dataNowshowing, setDataNowshowing ] = React.useState({});
+    const [ dataUpcoming, setDataUpcoming ] = React.useState([]);
+    const [ dataNowshowing, setDataNowshowing ] = React.useState([]);
+
+    const token = useSelector((state) => state.auth.token); 
 
     React.useEffect (() => {
-        getUpcoming().then((data) => {
-            setDataUpcoming(data);
-        });
-        getNowshowing().then((data) => {
-            setDataNowshowing(data);
-        });
+        getUpcoming()
+        getNowshowing()
     }, [])
 
     // get data movie Up Coming
     const getUpcoming = async () => {
-        const { data } = await axios.get('http://localhost:8888/movies/upcoming?page=1&limit=10');
-        return data;
+      try {
+        const response = await http().get('/movies/upcoming');
+        setDataUpcoming(response?.data?.results)
+      } catch (error) {
+        console.log(error)
+      }
     };
 
     const getNowshowing = async () => {
-        const { data } = await axios.get('http://localhost:8888/movies/nowShowing');
-        return data;
+      try {
+        const response = await http().get('/movies/nowShowing');
+        setDataNowshowing(response?.data.results)
+      }catch (error) {
+        console.log(error)
+      }
     };
 
     return (
     <div className='h-screen'>
-        <div> <Header></Header> </div>        
+        { token ? <Header2 /> : <Header />}        
         <div className='flex  items-center  py-16 px-28 bg-[#EAE7B1]'>
             <div className='flex flex-1 justify-center'>
                 <div className=''>
@@ -57,10 +66,10 @@ const HomePage = () => {
                 </div>
             </div>
             <div className='text-black-500 whitespace-nowrap overflow-scroll pb-5 overflow-y-hidden'>
-                {dataNowshowing?.results?.map((movies) => (
-                    <div className='inline-block text-center border-2 border-gray-300 rounded-lg p-8 mr-6 w-[220px] h-[450]'>
+                {dataNowshowing?.map((movies) => (
+                    <div className='inline-block text-center border-2 border-gray-300 rounded-lg p-8 mr-6 w-[220px] h-[500px]'>
                         <div>   
-                            <img className='mb-2' src={movies.pictures} alt="Black Widow"/>
+                            <img className='mb-2' src={movies.pictures} width="150" height="200" alt="Movies Pictures"/>
                         </div>
                         <div className='whitespace-normal'>
                             <h4 className='font-bold text-[18px] mb-2'>{movies.movieTitle}</h4>
@@ -85,7 +94,7 @@ const HomePage = () => {
                 </div>
                 <div className='flex-1'></div>
                 <div className='text-black-500'>
-                    <Link to='/' >view all</Link>
+                    <Link to='/ListMovie' >view all</Link>
                 </div>
             </div>
 
@@ -109,7 +118,7 @@ const HomePage = () => {
             {/* card of movies */}
 
             <div className='text-black-500 whitespace-nowrap overflow-scroll pb-5 overflow-y-hidden'>
-                {dataUpcoming?.results?.map((movies) => (
+                {dataUpcoming?.map((movies) => (
                     <div className='inline-block text-center border-2 border-gray-300 rounded-lg p-8 mr-6 w-[220px] h-[450]'>
                         <div>   
                             <img className='mb-2' src={movies.pictures} alt="Black Widow"/>

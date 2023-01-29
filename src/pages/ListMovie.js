@@ -2,23 +2,27 @@ import React from 'react';
 import Header2 from '../components/Header2';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import http from '../helpers/http';
 
 
 const ListMovie = () => {
 
-    const [ dataMovies, setDataMovies ] = React.useState({});
+    const [ dataMovies, setDataMovies ] = React.useState([]);
 
     React.useEffect (() => {
-        getData().then((data) => {
-            setDataMovies(data);
-        });
+        getDataMovies()
     }, [])
 
     // get data movie tittle and images
-    const getData = async () => {
-        const { data } = await axios.get('https://api.themoviedb.org/3/movie/upcoming?api_key=6984d06ddd66235d316ee35dc44ac611');
-        return data;
+    const getDataMovies = async () => {
+      try {
+        const response = await http().get('/movies');
+        setDataMovies(response?.data?.results)
+        console.log(response?.data?.results)
+      }catch (error) {
+        console.log(error)
+      }
     };
 
     return (
@@ -57,16 +61,16 @@ const ListMovie = () => {
 
         {/* card of movies start */}
             <div className='flex justify-center flex-wrap text-black-500 pb-5 bg-[#EAE7B1] py-5 px-5'>
-                {dataMovies?.results?.map((movies) => (
-                    <div className='inline-block text-center border-2 border-[#3C6255] rounded-lg p-8 mr-6 mb-7 w-[220px] h-[450]'>
+                {dataMovies?.map((movies) => (
+                    <div key={movies.id} className='inline-block text-center border-2 border-[#3C6255] rounded-lg p-8 mr-6 mb-7 w-[220px] h-[450px]'>
                         <div>   
-                            <img className='mb-2' src={'https://image.tmdb.org/t/p/w200' + movies.poster_path} alt="Black Widow"/>
+                            <img className='mb-2' src={movies.pictures} width="150" height="200" alt="Black Widow"/>
                         </div>
                         <div className='whitespace-normal'>
-                            <h4 className='font-bold text-[18px] mb-2'>{movies.title}</h4>
+                            <h4 className='font-bold text-[18px] mb-2'>{movies.movieTitle}</h4>
                         </div>
                         <div>
-                            <p className='text-[14px] text-center mb-6'>{movies.genre_ids}</p>
+                            <p className='text-[14px] text-center mb-6'>{movies.genre}</p>
                         </div>
                         <Link to='/'>
                             <button className='border-2 border-[#3C6255] rounded-lg py-1 px-9'>Details</button>

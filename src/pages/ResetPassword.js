@@ -1,7 +1,67 @@
-import React from 'react'
+import React from 'react';
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { Eye, EyeOff } from "react-feather";
+import http from '../helpers/http'
+import {Field, Form, Formik} from 'formik';
+import * as Yup from 'yup';
+import YupPasword from 'yup-password';
+YupPasword(Yup);
 
+// Form Validation
+const ResetPasswordSchema = Yup.object().shape({
+  codeUnique: Yup.string().required("Code is required"),
+  password: Yup.string()
+    .password()
+    .min(8, 'Min lenght 8')
+    .minLowercase(1, 'Min lowercase 1')
+    .minUppercase(1, 'Min uppercase 1')
+    .minSymbols(1, 'Min symbol 1')
+    .minNumbers(1, 'Min number 1')
+    .required('Required'),
+  confirmPassword: Yup.string().required('Required'),
+});
 
 const Resetpwd = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [succesMessage, setSuccesMessage] = React.useState("");
+  const [failedMessage, setFailedMessage] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const email = useSelector((state) => state.auth.email);
+  console.log(email)
+
+  const handleResetPwd = async (form) => {
+    try {
+      if (form.password === form.confirmPassword) {
+        const {codeUnique, password, confirmPassword} = form;
+        setIsLoading(true);
+        const {data} = await http().post('/auth/resetPassword', {
+          email,
+          codeUnique,
+          password,
+          confirmPassword,
+        });
+        setSuccesMessage('Password has been updated, please relogin');
+        setIsLoading(false);
+        setTimeout(() => {
+          navigate('/Signin');
+          setSuccesMessage("");
+        }, 2000)
+      } else {
+        setFailedMessage('Password and confirm password not match');
+      }
+    } catch (error) {
+      setFailedMessage(error?.response?.data?.message);
+    }
+  };
+
+  const reqResetPwd = (value) => {
+    handleResetPwd(value);
+  }
     return (
         <div className="grid grid-cols-2">
             {/* Left Side */}
@@ -9,10 +69,6 @@ const Resetpwd = () => {
                 <div className="w-full h-full bg-background bg-cover relative">
                     <div className="bg-[#61876E]/50 w-full h-full">
                         <div className="h-screen flex-col pl-20 pt-20">
-                            {/* <div className="pt-28">
-                                <img src={require('../assets/images/logo-eastick.png')} alt="logo" width="600" height="600"/>
-                            </div>
-                            <div className="text-5xl text-white font-inter">order, watch, well!</div> */}
                             <div className="mb-2.5">
                                 <img 
                                   src={require('../assets/images/logo-eastick.png')} 
@@ -70,31 +126,93 @@ const Resetpwd = () => {
                 <div className="pl-20 pb-0 py-20 font-inter font-semibold text-4xl">Fill your complete password</div>
                 <div className="w-4/5 pl-20 pb-0 pt-3 font-inter text-[#AAAAAA] text-lg ">set your new password</div>
             </div>
-            <form >
+
+            {succesMessage && (
+              <div className="flex justify-center items-center h-12 w-[300px] ml-20 bg-green-200 border-2 border-green-300 rounded-xl">
+                {succesMessage}
+              </div>
+            )}
+
+            {failedMessage && (
+              <div className="flex justify-center items-center h-12 w-[300px] ml-20 mt-2   bg-red-200 border-2 border-red-300 rounded-xl">
+                {failedMessage}
+              </div>
+            )}
+
+            <Formik
+              initialValues={{
+                codeUnique: '',
+                password: '',
+                confirmPassword: '',
+              }}
+              validationSchema={ResetPasswordSchema}
+              onSubmit={reqResetPwd}
+              >
+                {({errors, touched, dirty}) => (
+                  <Form >
                 <div className="pl-20 pb-0 pt-12 text-base">
                     <label for="code">Code</label>
                 </div>
                 <div className="pl-20 pb-0 pt-3">
-                    <input className="border border-[#DEDEDE] rounded-2xl h-12 w-3/4 pl-5" type="text" name="code" id="code" placeholder="Write your code"/>
+                    <Field className="border border-[#DEDEDE] rounded-2xl h-12 w-3/4 pl-5" type="text" name="codeUnique" placeholder="Write your code"/>
+                    {errors.codeUnique && touched.codeUnique ? (
+                          <div className="text-red-500">{errors.codeUnique}</div>
+                        ) : null}
                 </div>
                 <div className="pl-20 pb-0 pt-8 text-base">
                     <label for="password">Password</label>
                 </div>
                 <div className="pl-20 pb-0 pt-3">
-                    <input className="border border-[#DEDEDE] rounded-2xl h-12 w-3/4 pl-5" type="password" name="password" id="password" placeholder="Write your password"/>
+                    <Field className="border border-[#DEDEDE] rounded-2xl h-12 w-3/4 pl-5" type="password" name="password" placeholder="Write your password"/>
+                    {showPassword ? (
+                          <Eye
+                            className="absolute right-48 top-[445px]"
+                            onClick={() => setShowPassword(!showPassword)}
+                          />
+                        ) : (
+                          <EyeOff
+                            className="absolute right-48 top-[445px]"
+                            onClick={() => setShowPassword(!showPassword)}
+                          />
+                      )}
+                      {errors.password && touched.password ? (
+                        <div className="text-red-500">{errors.password}</div>
+                      ) : null}
                 </div>
                 <div className="pl-20 pb-0 pt-8 text-base">
                     <label for="confirmPassword">Confirm Password</label>
                 </div>
                 <div className="pl-20 pb-0 pt-3">
-                    <input className="border border-[#DEDEDE] rounded-2xl h-12 w-3/4 pl-5" type="confirmPassword" name="confirmPassword" id="confirmPassword" placeholder="Write your confirm password"/>
+                    <Field className="border border-[#DEDEDE] rounded-2xl h-12 w-3/4 pl-5" type="confirmPassword" name="confirmPassword" placeholder="Write your confirm password"/>
+                    {showPassword ? (
+                          <Eye
+                            className="absolute right-48 top-[445px]"
+                            onClick={() => setShowPassword(!showPassword)}
+                          />
+                        ) : (
+                          <EyeOff
+                            className="absolute right-48 top-[445px]"
+                            onClick={() => setShowPassword(!showPassword)}
+                          />
+                      )}
+                      {errors.confirmPassword && touched.confirmPassword ? (
+                        <div className="text-red-500">{errors.confirmPassword}</div>
+                      ) : null}
                 </div>
                 <div>
                     <div className="pl-20 pb-0 pt-8 ">
-                        <button className="border rounded-2xl bg-[#61876E] hover:bg-[#3C6255] h-12 w-3/4 text-base font-inter text-white " type="submit">Submit</button>
+                    <button 
+                        className={`${ isLoading && "btn loading"} border rounded-2xl bg-[#61876E] hover:bg-[#3C6255] h-12 w-3/4 text-base font-inter text-white`} 
+                        type="submit"
+                        disabled={!dirty || isLoading}
+                        >
+                          Submit
+                          </button>
                     </div>
                 </div>
-            </form>
+            </Form>
+                )}
+            </Formik>
             </div>
         </div>
     )

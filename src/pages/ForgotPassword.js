@@ -1,7 +1,48 @@
 import React from 'react'
+import { useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import {Field, Form, Formik} from 'formik';
+import * as Yup from 'yup';
+import YupPasword from 'yup-password';
+import http from '../helpers/http'
+import {setEmail} from "./redux/reducers/auth"
+YupPasword(Yup);
+
+const forgotSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Required"),
+});
 
 
 const Forgotpwd = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [succesMessage, setSuccesMessage] = React.useState("");
+  const [failedMessage, setFailedMessage] = React.useState("");
+
+
+  const handleForgotPwd = async (value) => {
+    try {
+      const {email} = value;
+      setIsLoading(true);
+      const data  = await http().post('/auth/forgotPassword', {email});
+      dispatch(setEmail(email))
+      console.log('masuk')
+      setSuccesMessage('Request Succes, Please Chek your Email.');
+      setIsLoading(false);
+      setTimeout(() => {
+        navigate('/Resetpwd');
+        setSuccesMessage("");
+      }, 2000)
+    } catch (error) {
+      setFailedMessage("User Not Found");
+    }
+  };
+
+  const reqForgotPwd = (value) => {
+    handleForgotPwd(value);
+  }
     return (
         <div className="grid grid-cols-2">
             {/* Left Side */}
@@ -9,10 +50,6 @@ const Forgotpwd = () => {
                 <div className="w-full h-full bg-background bg-cover relative">
                     <div className="bg-[#61876E]/50 w-full h-full">
                         <div className="h-screen flex-col pl-20 pt-20">
-                            {/* <div className="pt-28">
-                                <img src={require('../assets/images/logo-eastick.png')} alt="logo" width="600" height="600"/>
-                            </div>
-                            <div className="text-5xl text-white font-inter">order, watch, well!</div> */}
                             <div className="mb-2.5">
                                 <img 
                                   src={require('../assets/images/logo-eastick.png')} 
@@ -70,19 +107,50 @@ const Forgotpwd = () => {
                 <div className="pl-20 pb-0 py-20 font-inter font-semibold text-4xl">Fill your complete email</div>
                 <div className="w-4/5 pl-20 pb-0 pt-3 font-inter text-[#AAAAAA] text-lg ">we'll send a link to your email shortly</div>
             </div>
-            <form >
+
+            {succesMessage && (
+              <div className="flex justify-center items-center h-12 w-[300px] ml-20 bg-green-200 border-2 border-green-300 rounded-xl">
+                {succesMessage}
+              </div>
+            )}
+
+            {failedMessage && (
+              <div className="flex justify-center items-center h-12 w-[300px] ml-20 mt-2   bg-red-200 border-2 border-red-300 rounded-xl">
+                {failedMessage}
+              </div>
+            )}
+
+            <Formik 
+              initialValues={{email: ''}}
+              validationSchema={forgotSchema}
+              onSubmit={reqForgotPwd}
+              >
+                {({errors, touched, dirty}) => (
+                  <Form >
                 <div className="pl-20 pb-0 pt-12 text-base">
-                    <label for="email">Email</label>
-                </div>
-                <div className="pl-20 pb-0 pt-3">
-                    <input className="border border-[#DEDEDE] rounded-2xl h-12 w-3/4 pl-5" type="text" name="email" id="email" placeholder="Write your email"/>
-                </div>
+                      <label htmlFor="email">Email</label>
+                  </div>
+                  <div className="pl-20 pb-0 pt-3">
+                      <Field className="border border-[#DEDEDE] rounded-2xl h-12 w-3/4 pl-5" type="text" name="email" placeholder="Write your email" />
+                        {errors.email && touched.email ? (
+                          <div className="text-red-500">{errors.email}</div>
+                        ) : null}
+                  </div>
                 <div>
                     <div className="pl-20 pb-0 pt-12 ">
-                        <button className="border rounded-2xl bg-[#61876E] hover:bg-[#3C6255] h-12 w-3/4 text-base font-inter text-white " type="submit">Submit</button>
+                        <button 
+                        className={`${ isLoading && "btn loading"} border rounded-2xl bg-[#61876E] hover:bg-[#3C6255] h-12 w-3/4 text-base font-inter text-white`} 
+                        type="submit"
+                        disabled={!dirty || isLoading}
+                        >
+                          Submit
+                          </button>
                     </div>
                 </div>
-            </form>
+                </Form>
+                )}
+            </Formik>
+            
             </div>
         </div>
     )
