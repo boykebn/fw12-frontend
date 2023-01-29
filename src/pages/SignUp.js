@@ -44,7 +44,7 @@ const SignUp = () => {
     return (
         <div className="grid grid-cols-2">
           {/* left Side */}
-            <div className=" max-[768px]:hidden">
+            <div className="max-[768px]:hidden">
                 <div className="w-full h-full bg-background bg-cover relative">
                     <div className="bg-[#61876E]/50 w-full h-full">
                         <div className="h-screen flex justify-center items-center flex-col">
@@ -59,12 +59,12 @@ const SignUp = () => {
 
 
             {/* Right Side */}
-            <div className="max-[768px]:w-screen max-[768px]:py-[50px] max-[375px]:pt-[15px]">
-                <div className="pt-16 pl-20">
+            <div className="w-full flex flex-col justify-center">
+                <div className="md:pt-16 md:pl-20">
                     <img 
                     src={require('../assets/images/logo-eastick.png')} 
                     alt="logo" 
-                    className="hidden max-[768px]:block max-[768px]:w-[180px] max-[375px]:w-[150px]" />
+                    className="md:w-[200px] w-[100]" />
                 </div>
             <div>
                 <div className="pl-20 pb-0 py-20 font-inter font-semibold text-5xl">Sign Up</div>
