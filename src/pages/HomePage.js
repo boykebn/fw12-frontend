@@ -80,7 +80,7 @@ const HomePage = () => {
             <div className="flex flex-col justify-center items-center text-center gap-3 whitespace-normal">
                 <h4 className="text-lg font-semibold">{movies.movieTitle}</h4>
                 <span className="text-md">Genre: {movies.genre}</span>
-                <Link to="/MovieDetails">
+                <Link to={"/MovieDetails/" + movies.id}>
                 <button className="btn btn-outline btn-primary">Details</button>
               </Link>
             </div>
@@ -161,7 +161,7 @@ const HomePage = () => {
               <div>
                 <p className="text-[14px] text-center mb-6">{movies.genre}</p>
               </div>
-              <Link to="/">
+              <Link to={"/MovieDetails/" + movies.id}>
                 <button className="border-2 border-black rounded-lg py-1 px-9 hover:bg-green-600 transition-all duration-500">
                   Details
                 </button>

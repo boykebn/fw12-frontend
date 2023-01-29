@@ -31,7 +31,7 @@ const Resetpwd = () => {
   const [failedMessage, setFailedMessage] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
 
-  const email = useSelector((state) => state.auth.email);
+  const email = useSelector((state) => state.auth.email.email);
   console.log(email)
 
   const handleResetPwd = async (form) => {

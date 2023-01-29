@@ -2,26 +2,37 @@ import React from "react";
 import Header2 from "../components/Header2";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
+import { ArrowLeft, ArrowRight } from "react-feather";
 // import axios from 'axios';
 import http from "../helpers/http";
 
 const ListMovie = () => {
   const [dataMovies, setDataMovies] = React.useState([]);
+  const [page, setPage] = React.useState(1);
+  const [sort, setSort] = React.useState('');
+  const [search, setSearch] = React.useState('');
 
   React.useEffect(() => {
+    // get data movie tittle and images
+    const getDataMovies = async () => {
+      try {
+        const response = await http().get(`/movies?page=${page}&limit=5&sort=${sort}&sortBy=title&search=${search}`);
+        setDataMovies(response?.data?.results);
+        console.log(response?.data?.results);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     getDataMovies();
-  }, []);
+  }, [page, sort, search]);
 
-  // get data movie tittle and images
-  const getDataMovies = async () => {
-    try {
-      const response = await http().get("/movies");
-      setDataMovies(response?.data?.results);
-      console.log(response?.data?.results);
-    } catch (error) {
-      console.log(error);
-    }
+  const nextPage = () => {
+    setPage(page + 1);
   };
+  const prevPage = () => {
+    setPage(page - 1);
+  };
+
 
   return (
     <div className="h-screen">
@@ -35,20 +46,18 @@ const ListMovie = () => {
           <span>List Movie</span>
         </div>
         <div className="basis-1/2 flex flex-col md:flex-row justify-between gap-2">
-          <select className="select w-full max-w-xs">
-            <option disabled selected>
-              Pick your favorite Simpson
-            </option>
-            <option>Homer</option>
-            <option>Marge</option>
-            <option>Bart</option>
-            <option>Lisa</option>
-            <option>Maggie</option>
+          <select name="sort" onChange={(e) => setSort(e.target.value)} className="select w-full max-w-xs">
+                <option value="sort" className="hidden font-normal">
+                  Sort
+                </option>
+                <option value="ASC">A - Z</option>
+                <option value="DESC">Z - A</option>
           </select>
 
           <input
             type="text"
-            placeholder="Search movie..."
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search movie name..."
             className="input w-full max-w-xs font-mulish outline-none"
           />
         </div>
@@ -111,7 +120,7 @@ const ListMovie = () => {
             </div>
             <div className="whitespace-normal">
               <h4 className="font-bold text-[18px] mb-2">
-              {item.title}
+              {item.movieTitle}
               </h4>
             </div>
             <div>
@@ -125,37 +134,65 @@ const ListMovie = () => {
           </div>
             ))}
         </div>
-        <nav aria-label="Page navigation example">
-  <ul className="inline-flex items-center -space-x-px">
-    <li>
-      <div className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-        <span className="sr-only">Previous</span>
-        <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
-      </div>
-    </li>
-    <li>
-      <div className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</div>
-    </li>
-    <li>
-      <div className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</div>
-    </li>
-    <li>
-      <div aria-current="page" className="z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</div>
-    </li>
-    <li>
-      <div className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</div>
-    </li>
-    <li>
-      <div className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</div>
-    </li>
-    <li>
-      <div className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-        <span className="sr-only">Next</span>
-        <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
-      </div>
-    </li>
-  </ul>
-        </nav>
+        <div className="flex justify-around mt-8 mb-3 gap-5">
+            {page > 1 ? (
+              <button
+                onClick={prevPage}
+                className="btn bg-[#3C6255] flex gap-3"
+              >
+                <ArrowLeft />
+                <div>Prev</div>
+              </button>
+            ) : (
+              <button
+                onClick={prevPage}
+                disabled={true}
+                className="btn bg-[#3C6255] flex gap-3"
+              >
+                <ArrowLeft />
+                <div>Prev</div>
+              </button>
+            )}
+            <button
+              onClick={nextPage}
+              disabled={dataMovies.length < 5}
+              className="btn bg-[#3C6255] flex gap-3"
+            >
+              <div>Next</div>
+              <ArrowRight />
+            </button>
+          </div>
+        {/* <nav aria-label="Page navigation example">
+          <ul className="inline-flex items-center -space-x-px">
+            <li>
+              <div className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                <span className="sr-only">Previous</span>
+                <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+              </div>
+            </li>
+            <li>
+              <div className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</div>
+            </li>
+            <li>
+              <div className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</div>
+            </li>
+            <li>
+              <div aria-current="page" className="z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</div>
+            </li>
+            <li>
+              <div className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</div>
+            </li>
+            <li>
+              <div className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</div>
+            </li>
+            <li>
+              <div className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                <span className="sr-only">Next</span>
+                <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
+              </div>
+            </li>
+          </ul>
+        </nav> */}
 
         </div>
         {/* card of movies end */}
@@ -167,7 +204,7 @@ const ListMovie = () => {
 
       <div>
         {" "}
-        <Footer></Footer>{" "}
+        <Footer />{" "}
       </div>
     </div>
   );
