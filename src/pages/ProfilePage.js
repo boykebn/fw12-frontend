@@ -1,10 +1,60 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
+import { Eye, EyeOff } from "react-feather";
+import {logoutAction} from './redux/action/auth'
+import { useSelector, useDispatch } from 'react-redux';
 import Header2 from '../components/Header2';
 import Footer from '../components/Footer';
-import { Link } from 'react-router-dom';
+import http from '../helpers/http';
+import * as Yup from 'yup';
+import YupPasword from 'yup-password';
+YupPasword(Yup);
+
+
+// Form Validation
+const changePasswordSchema = Yup.object().shape({
+  password: Yup.string()
+    .password()
+    .min(8, 'Min lenght 8')
+    .minLowercase(1, 'Min lowercase 1')
+    .minUppercase(1, 'Min uppercase 1')
+    .minSymbols(1, 'Min symbol 1')
+    .minNumbers(1, 'Min number 1')
+    .required('Required'),
+  confirmPassword: Yup.string().required('Required'),
+});
 
 
 const ProfilePage = () => {
+
+  const dispatch = useDispatch();
+
+  // Logout action
+  const handleLogout = () => {
+    dispatch(logoutAction());
+  };
+
+  // get data Profile
+  const [getProfile, setGetProfile] = React.useState({});
+  // console.log(`https://192.168.1.9:8888/assets/uploads/${getProfile?.picture}`);
+  const token = useSelector(state => state.auth.token);
+  const getDataProfile = async () => {
+    try {
+      const response = await http(token).get('/profile');
+      setGetProfile(response?.data?.results);
+    } catch (error) {
+      if (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    if (token) {
+      getDataProfile();
+    }
+  }, [token]);
+
     return (
         <div>
             <div> <Header2></Header2> </div>
@@ -15,13 +65,13 @@ const ProfilePage = () => {
                     <div className='bg-[#EAE7B1] w-[328px] h-[430px] rounded-lg p-10'>
                         <p className='font-mulish'>INFO</p>
                         <div className='flex justify-center items-center'>
-                            <img src={require('../assets/images/profile.png')} alt="profile" />
+                            <img src={getProfile?.picture} alt="profile" />
                         </div>
-                        <div className='flex justify-center items-center font-bold'>Boyke Berry Nugraha</div>
+                        <div className='flex justify-center items-center font-bold'> {getProfile?.firstName} {getProfile?.lastName}</div>
                         <div className='flex justify-center items-center font-mulish text-sm text-[#4E4B66] pt-2 pb-10'>Eastick People</div>
                         <hr className='border-[#A6BB8D]' />
                         <div className='pt-5 flex justify-center'>
-                            <button className='border rounded-lg w-[187px] h-[46px] hover:bg-[#61876E] bg-[#A6BB8D]' type='button'>Log Out</button>
+                            <button onClick={() => dispatch(handleLogout())} className='border rounded-lg w-[187px] h-[46px] hover:bg-[#61876E] bg-[#A6BB8D]' type='button'>Log Out</button>
                         </div>
                     </div>
                 </div>
