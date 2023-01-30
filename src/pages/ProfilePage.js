@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { Eye, EyeOff } from "react-feather";
-import {logoutAction} from './redux/action/auth'
+import { logoutAction } from './redux/reducers/auth';
 import { useSelector, useDispatch } from 'react-redux';
 import Header2 from '../components/Header2';
 import Footer from '../components/Footer';
