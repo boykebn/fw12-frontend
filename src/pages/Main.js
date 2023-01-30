@@ -15,6 +15,7 @@ import OrderHistory from "./OrderHistory";
 import TicketResultActived from "./TicketResultActived";
 import TicketResultUsed from "./TicketResultUsed";
 import TicketResultExpired from "./TicketResultExpired";
+import PrivateRoute from "../components/PrivateRoute";
 
 const Main = () => {
     return (
@@ -27,10 +28,24 @@ const Main = () => {
             <Route path="/Forgotpwd" element={<ForgotPassword />} />
             <Route path="/Resetpwd" element={<ResetPassword />} />
             <Route path="/Listmovie" element={<ListMovie />} />
-            <Route path="/MovieDetails/:id" element={<MovieDetails />} />
+            <Route 
+            path="/MovieDetails/:id" 
+            element={
+              <PrivateRoute>
+                <MovieDetails />
+              </PrivateRoute>
+              } 
+            />
             <Route path="/OrderPage" element={<OrderPage />} />
             <Route path="/PaymentPage" element={<PaymentPage />} />
-            <Route path="/ProfilePage" element={<ProfilePage />} />
+            <Route
+              path="/Profile"
+              element={
+                <PrivateRoute>
+                  <ProfilePage />
+                </PrivateRoute>
+              }
+            />
             <Route path="/OrderHistory" element={<OrderHistory />} />
             <Route path="/TicketResultActived" element={<TicketResultActived />} />
             <Route path="/TicketResultUsed" element={<TicketResultUsed />} />
