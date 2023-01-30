@@ -1,6 +1,7 @@
 import React from 'react'
 import Header2 from '../components/Header2';
 import Footer from '../components/Footer';
+import { Link } from 'react-router-dom';
 
 
 const PaymentPage = () => {
@@ -107,8 +108,13 @@ const PaymentPage = () => {
 
                         <div className=' pt-7 pb-10'>
                             <div className='flex justify-between'>
-                                <button className='border rounded-lg font-mulish font-bold text-sm w-[300px] h-[56px] bg-[#EAE7B1] hover:bg-[#A6BB8D]'>Previous Step</button>
-                                <button className='mr-[65px] font-mulish text-sm font-bold border rounded-lg w-[300px] h-[56px] bg-[#EAE7B1] hover:bg-[#A6BB8D]'>Pay your order</button>
+                                <Link to="/OrderPage">
+                                  <button className='border rounded-lg font-mulish font-bold text-sm w-[300px] h-[56px] bg-[#EAE7B1] hover:bg-[#A6BB8D]'>Previous Step</button>
+                                </Link>
+
+                                <Link to="/TickertResultActived">
+                                  <button className='mr-[65px] font-mulish text-sm font-bold border rounded-lg w-[300px] h-[56px] bg-[#EAE7B1] hover:bg-[#A6BB8D]'>Pay your order</button>
+                                </Link>
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const BorderListCinemas = () => {
     return (
@@ -17,7 +18,9 @@ const BorderListCinemas = () => {
                 <p className='pr-6 font-mulish text-sm font-bold'>$10.00/seat</p>
             </div>
             <div className='flex justify-center items-center pt-7'>
+              <Link to="/OrderPage">
                 <button className='font-mulish block w-9/12 h-10 bg-[#61876E] hover:bg-[#3C6255] border rounded-lg' type="button">Book Now</button>
+              </Link>
             </div>
         </div>
     )

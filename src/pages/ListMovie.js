@@ -126,7 +126,7 @@ const ListMovie = () => {
             <div>
               <p className="text-[14px] text-center mb-6">...</p>
             </div>
-            <Link to="/">
+          <Link to={"/MovieDetails/" + item.id}>
               <button className="border-2 border-black rounded-lg py-1 px-9 hover:bg-green-600 transition-all duration-500">
                 Details
               </button>
