@@ -6,10 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import http from "../helpers/http";
+import {logoutAction} from '../pages/redux/reducers/auth'
 
 // import { Search } from "react-feather";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
   // get data Profile
@@ -59,8 +61,8 @@ const Header = () => {
               </div>
             </div>
 
-            <div className="hidden md:block">
-              <div className="relative">
+            <div className="hidden md:block hover:">
+              <div className="group relative">
                 {getProfile?.picture ? (
                 <a href="/" className="flex-shrink-0">
                   <img
@@ -79,6 +81,16 @@ const Header = () => {
                 </a>
               )}
                 <span className="bottom-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
+                <div className="hidden group-hover:block absolute right-0 border-2 rounded border-[#dedede] bg-[#FEFCF3] py-2 pl-4 pr-8">
+                  <div className="hover:bg-gray-200 rounded w-[60px] text-center">
+                    <Link to="/ProfilePage">Profile</Link>
+                  </div>
+                  <div className="hover:bg-gray-200 rounded w-[60px] text-center">
+                    <button type="button" onClick={() => dispatch(logoutAction())}>
+                      Logout
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 

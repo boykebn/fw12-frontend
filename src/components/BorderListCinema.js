@@ -19,7 +19,7 @@ const BorderListCinemas = () => {
             </div>
             <div className='flex justify-center items-center pt-7'>
               <Link to="/OrderPage">
-                <button className='font-mulish block w-9/12 h-10 bg-[#61876E] hover:bg-[#3C6255] border rounded-lg' type="button">Book Now</button>
+                <button className='font-mulish block w-9/12 h-10 bg-[#61876E] w-[200px] hover:bg-[#3C6255] border rounded-lg' type="button">Book Now</button>
               </Link>
             </div>
         </div>
