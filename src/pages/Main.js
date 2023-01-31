@@ -39,7 +39,7 @@ const Main = () => {
             <Route path="/OrderPage" element={<OrderPage />} />
             <Route path="/PaymentPage" element={<PaymentPage />} />
             <Route
-              path="/Profile"
+              path="/ProfilePage"
               element={
                 <PrivateRoute>
                   <ProfilePage />

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "react-feather";
 // import axios from 'axios';
 import http from "../helpers/http";
+import Skeleton from "../components/Skeleton";
 
 const ListMovie = () => {
   const [dataMovies, setDataMovies] = React.useState([]);
@@ -106,34 +107,38 @@ const ListMovie = () => {
       </div>
       {/* month button */}
 
-            {/* card of movies start */}
+        {/* card of movies start */}
       <div className="w-full p-5 bg-[#A6BB8D]">
         <div className="flex flex-col justify-center items-center py-7 bg-[#EAE7B1] rounded-lg">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {dataMovies.map((item) => (
-          <div
-            key={item.id}
-            className="inline-block text-center border-2 border-gray-300 rounded-lg p-6 m-4 w-[220px] h-[450] hover:bg-[#047857] hover:border-gray-900 transition-all duration-700"
-          >
-            <div>
-              <img className="mb-2 rounded-lg" src={item.pictures} alt="Black Widow" />
+          {dataMovies[0] ? (
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {dataMovies.map((item) => (
+                <div
+                  key={item.id}
+                  className="inline-block text-center border-2 border-gray-300 rounded-lg p-6 m-4 w-[220px] h-[450] hover:bg-[#047857] hover:border-gray-900 transition-all duration-700"
+                >
+                <div>
+                  <img className="mb-2 rounded-lg" src={item.pictures} alt="Black Widow" />
+                </div>
+                <div className="whitespace-normal">
+                  <h4 className="font-bold text-[18px] mb-2">
+                  {item.movieTitle}
+                  </h4>
+                </div>
+                <div>
+                  <p className="text-[14px] text-center mb-6">...</p>
+                </div>
+              <Link to={"/MovieDetails/" + item.id}>
+                  <button className="border-2 border-black rounded-lg py-1 px-9 hover:bg-green-600 transition-all duration-500">
+                    Details
+                  </button>
+                </Link>
+              </div>
+                ))}
             </div>
-            <div className="whitespace-normal">
-              <h4 className="font-bold text-[18px] mb-2">
-              {item.movieTitle}
-              </h4>
-            </div>
-            <div>
-              <p className="text-[14px] text-center mb-6">...</p>
-            </div>
-          <Link to={"/MovieDetails/" + item.id}>
-              <button className="border-2 border-black rounded-lg py-1 px-9 hover:bg-green-600 transition-all duration-500">
-                Details
-              </button>
-            </Link>
-          </div>
-            ))}
-        </div>
+          ) : (
+            <Skeleton />
+          )}
         <div className="flex justify-around mt-8 mb-3 gap-5">
             {page > 1 ? (
               <button

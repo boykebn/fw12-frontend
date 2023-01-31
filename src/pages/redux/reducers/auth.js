@@ -17,7 +17,10 @@ const authReducers = createSlice({
           return initialState;
         },
         setEmail: (state, action) => {
-          state.email = action.payload.email
+          // console.log(action.payload)
+          state.email = action.payload
+          // console.log("first")
+          // console.log(action.payload)
         },
         setError:(state, action) => {
           state.error = null

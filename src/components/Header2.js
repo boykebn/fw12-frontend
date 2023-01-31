@@ -1,14 +1,38 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 import { Transition } from "@headlessui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
+import http from "../helpers/http";
 
 // import { Search } from "react-feather";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  // get data Profile
+  const [getProfile, setGetProfile] = React.useState({});
+  // console.log(`https://192.168.1.9:8888/assets/uploads/${getProfile?.picture}`);
+  const token = useSelector(state => state.auth.token);
+  const getDataProfile = async () => {
+    try {
+      const response = await http(token).get('/profile');
+      setGetProfile(response?.data?.results);
+    } catch (error) {
+      if (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    if (token) {
+      getDataProfile();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   return (
     <div>
@@ -37,11 +61,23 @@ const Header = () => {
 
             <div className="hidden md:block">
               <div className="relative">
-                <img
-                  className="w-12 h-12 rounded-full"
-                  src={require('../assets/images/profile-logo.png')}
-                  alt=""
-                />
+                {getProfile?.picture ? (
+                <a href="/" className="flex-shrink-0">
+                  <img
+                    className="md:w-[50px] w-[50px] rounded-full"
+                    src={getProfile?.picture}
+                    alt="logo"
+                  />
+                </a>
+                ) : (
+                <a href="/" className="flex-shrink-0">
+                  <img
+                    className="md:w-[50px] w-[50px] rounded-full"
+                    src={require("../assets/images/dummyAvatar.jpg")}
+                    alt="logo"
+                  />
+                </a>
+              )}
                 <span className="bottom-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
               </div>
             </div>
@@ -90,7 +126,7 @@ const Header = () => {
                 <Link to="/">List Movie</Link>
               </div>
               <div className="flex justify-center items-center p-5 text-base font-normal hover:font-semibold border-b border-gray-700">
-                <Link to="/">Profile</Link>
+                <Link to="/ProfilePage">Profile</Link>
               </div>
               <div className="flex justify-center items-center p-5 text-base font-normal hover:font-semibold border-b border-gray-700">
                 <Link to="/">Logout</Link>

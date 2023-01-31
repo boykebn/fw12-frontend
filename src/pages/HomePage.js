@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 // import axios from 'axios';
 import http from "../../src/helpers/http";
+import Skeleton from "../components/Skeleton";
 
 const HomePage = () => {
   const [dataUpcoming, setDataUpcoming] = React.useState([]);
@@ -70,24 +71,28 @@ const HomePage = () => {
             </Link>
           </div>
         </div>
-        <div className="text-black whitespace-nowrap overflow-scroll pb-5 overflow-y-hidden">
-          {dataNowshowing?.map((movies) => (
-            <React.Fragment key={movies.id}>
-            <div className="w-[290px] h-[370px] hover:h-[530px] transition-all duration-1000 cursor-pointer m-5 py-5 inline-block rounded overflow-hidden shadow-lg">
-            <div className="flex justify-center items-center p-6"> 
-            <img className="w-[200px] rounded-lg" src={movies.pictures} alt="movie" />
-            </div>
-            <div className="flex flex-col justify-center items-center text-center gap-3 whitespace-normal">
-                <h4 className="text-lg font-semibold">{movies.movieTitle}</h4>
-                <span className="text-md">Genre: {movies.genre}</span>
-                <Link to={"/MovieDetails/" + movies.id}>
-                <button className="btn btn-outline btn-primary">Details</button>
-              </Link>
-            </div>
-          </div>          
-            </React.Fragment>
-          ))}
-        </div>
+        {dataNowshowing[0] ? (
+          <div className="text-black whitespace-nowrap overflow-scroll pb-5 overflow-y-hidden">
+            {dataNowshowing?.map((movies) => (
+              <React.Fragment key={movies.id}>
+              <div className="w-[290px] h-[370px] hover:h-[530px] transition-all duration-1000 cursor-pointer m-5 py-5 inline-block rounded overflow-hidden shadow-lg">
+              <div className="flex justify-center items-center p-6"> 
+              <img className="w-[200px] rounded-lg" src={movies.pictures} alt="movie" />
+              </div>
+              <div className="flex flex-col justify-center items-center text-center gap-3 whitespace-normal">
+                  <h4 className="text-lg font-semibold">{movies.movieTitle}</h4>
+                  <span className="text-md">Genre: {movies.genre}</span>
+                  <Link to={"/MovieDetails/" + movies.id}>
+                  <button className="btn btn-outline btn-primary">Details</button>
+                </Link>
+              </div>
+            </div>          
+              </React.Fragment>
+            ))}
+          </div>
+        ) : (
+          <Skeleton />
+        )}
       </div>
       {/* now showing end */}
 
@@ -147,28 +152,32 @@ const HomePage = () => {
 
         {/* card of movies */}
 
-        <div className="text-black whitespace-nowrap overflow-scroll pb-5 overflow-y-hidden">
-          {dataUpcoming?.map((movies) => (
-            <div key={movies.id} className="inline-block text-center border-2 border-gray-300 rounded-lg p-6 m-4 w-[220px] h-[450] hover:bg-[#047857] hover:border-gray-900 transition-all duration-700">
-              <div>
-                <img className="mb-2 rounded-lg" src={movies.pictures} alt="Black Widow" />
+        {dataUpcoming[0] ? (
+          <div className="text-black whitespace-nowrap overflow-scroll pb-5 overflow-y-hidden">
+            {dataUpcoming?.map((movies) => (
+              <div key={movies.id} className="inline-block text-center border-2 border-gray-300 rounded-lg p-6 m-4 w-[220px] h-[450] hover:bg-[#047857] hover:border-gray-900 transition-all duration-700">
+                <div>
+                  <img className="mb-2 rounded-lg" src={movies.pictures} alt="Black Widow" />
+                </div>
+                <div className="whitespace-normal">
+                  <h4 className="font-bold text-[18px] mb-2">
+                    {movies.movieTitle}
+                  </h4>
+                </div>
+                <div>
+                  <p className="text-[14px] text-center mb-6">{movies.genre}</p>
+                </div>
+                <Link to={"/MovieDetails/" + movies.id}>
+                  <button className="border-2 border-black rounded-lg py-1 px-9 hover:bg-green-600 transition-all duration-500">
+                    Details
+                  </button>
+                </Link>
               </div>
-              <div className="whitespace-normal">
-                <h4 className="font-bold text-[18px] mb-2">
-                  {movies.movieTitle}
-                </h4>
-              </div>
-              <div>
-                <p className="text-[14px] text-center mb-6">{movies.genre}</p>
-              </div>
-              <Link to={"/MovieDetails/" + movies.id}>
-                <button className="border-2 border-black rounded-lg py-1 px-9 hover:bg-green-600 transition-all duration-500">
-                  Details
-                </button>
-              </Link>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <Skeleton />
+        )}
       </div>
       {/* upcoming end */}
 

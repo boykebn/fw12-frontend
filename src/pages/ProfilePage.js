@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Eye, EyeOff } from "react-feather";
 import { logoutAction } from './redux/reducers/auth';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 import http from '../helpers/http';
 import * as Yup from 'yup';
 import YupPasword from 'yup-password';
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 YupPasword(Yup);
 
 
@@ -60,8 +60,6 @@ const ProfilePage = () => {
   // update data profile
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
-  // const firstName = String(fullName).split(' ')[0];
-  // const lastName = String(fullName).split(' ').slice(1).join(' ');
   const [email, setEmail] = React.useState('');
   const [phoneNUm, setPhoneNUm] = React.useState('');
 
@@ -118,7 +116,11 @@ const ProfilePage = () => {
                     <div className='bg-[#EAE7B1] w-[328px] h-[430px] rounded-lg p-10'>
                         <p className='font-mulish'>INFO</p>
                         <div className='flex justify-center items-center'>
-                            <img src={getProfile?.picture} alt="profile" />
+                          {getProfile?.picture ? (
+                            <img src={getProfile?.picture} alt="profile" className='rounded-full w-[100px]' />
+                          ) : (
+                            <img src={require('../assets/images/dummyAvatar.jpg')} className="rounded-full w-[100px]" alt="profile" />
+                          )}
                         </div>
                         <div className='flex justify-center items-center font-bold'> {getProfile?.firstName} {getProfile?.lastName}</div>
                         <div className='flex justify-center items-center font-mulish text-sm text-[#4E4B66] pt-2 pb-10'>Eastick People</div>
@@ -147,21 +149,21 @@ const ProfilePage = () => {
                         <form className='pt-5'>
                             <div className='inline-block '>
                                 <label className='block pb-2' for="fname">First Name</label>
-                                <input onChange={value => setFirstName(value)} className='border  w-[300px] h-[40px] rounded pl-2' type="text" name="firstName" placeholder={getProfile?.firstName}/>
+                                <input onChange={ (e) => setFirstName(e.target.value)} className='border  w-[300px] h-[40px] rounded pl-2' type="text" name="firstName" placeholder={getProfile?.firstName}/>
                             </div>
                             <div className='inline-block pl-5'>
                                 <label className='block pb-2' for="lname">Last Name</label>
-                                <input onChange={value => setLastName(value)} className='border w-[300px] h-[40px] rounded pl-2' type="text" name="lastName" placeholder={getProfile?.lastName}/>
+                                <input onChange={ (e) => setLastName(e.target.value)} className='border w-[300px] h-[40px] rounded pl-2' type="text" name="lastName" placeholder={getProfile?.lastName}/>
                             </div>
                             <div className='inline-block pt-3'>
                                 <label className='block pb-2' for="email">Email</label>
-                                <input onChange={value => setEmail(value)} className='border w-[300px] h-[40px] rounded pl-2' type="text" name="email" placeholder={getProfile?.email}/>
+                                <input onChange={ (e) => setEmail(e.target.value)} className='border w-[300px] h-[40px] rounded pl-2' type="text" name="email" placeholder={getProfile?.email}/>
                             </div>
                             <div className='inline-block pl-5'>
                                 <label className='block pb-2' for="phone-numb">Phone Number</label>
                                 <div className='border w-[300px] h-[40px] rounded p-2 bg-white'>
                                     <input className='w-[40px] border-r-2' type="text" name="phoneNUm" placeholder="+62"/>
-                                    <input onChange={value => setPhoneNUm(value)} className='pl-2' type="text" name="phoneNUm" placeholder={getProfile?.phoneNUm}/>
+                                    <input onChange={ (e) => setPhoneNUm(e.target.value)} className='pl-2' type="text" name="phoneNUm" placeholder={getProfile?.phoneNUm}/>
                                 </div>
                             </div>
                         </form>
@@ -184,16 +186,16 @@ const ProfilePage = () => {
                         <Form className='flex'>
                             <div class="privacy-content1">
                                 <label className='block' for="Nwpassword">New Password</label>
-                                <Field className='border w-[300px] h-[40px] rounded pl-2' type="password" name="password" placeholder="Write your password"/>
+                                <Field className='border w-[300px] h-[40px] rounded pl-2' type={showPassword ? "text" : "password"} name="password" placeholder="Write your password"/>
                                 {showPassword ? (
                                   <Eye
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute top-[50px] right-[10px]"
+                                    className="absolute top-[836px] right-[715px]"
                                   />
                                 ) : (
                                   <EyeOff
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute top-[50px] right-[10px]"
+                                    className="absolute top-[836px] right-[715px]"
                                   />
                                 )}
                                 {errors.password && touched.password ? (
@@ -202,16 +204,16 @@ const ProfilePage = () => {
                             </div>
                             <div className='pl-5'>
                                 <label className='block' for="confirm-pwd">Confirm Password</label>
-                                <Field className='border w-[300px] h-[40px] rounded pl-2' type="password" name="confirmPassword" placeholder="Write your confirm password"/>
+                                <Field className='border w-[300px] h-[40px] rounded pl-2' type={showPassword ? "text" : "password"} name="confirmPassword" placeholder="Write your confirm password"/>
                                 {showPassword2 ? (
                                   <Eye
                                     onClick={() => setShowPassword2(!showPassword2)}
-                                    className="absolute top-[50px] right-[10px]"
+                                    className="absolute top-[836px] right-[390px]"
                                   />
                                 ) : (
                                   <EyeOff
                                     onClick={() => setShowPassword2(!showPassword2)}
-                                    className="absolute top-[50px] right-[10px]"
+                                    className="absolute top-[836px] right-[390px]"
                                   />
                                 )}
 
@@ -222,14 +224,14 @@ const ProfilePage = () => {
                                 ) : null}
                             </div>
 
-                          <div className='pt-5 pb-5'>
-                              <button className='border rounded-lg w-[320px] h-[46px] bg-[#EAE7B1] hover:bg-[#A6BB8D]' type='submit'>Update changes</button>
-                          </div>
                         </Form>
                         )}
                       </Formik>
                     </div>
                 </div>
+                          <div className='pt-5 pb-5'>
+                              <button onSubmit={changeUpdatePassword} className='border rounded-lg w-[320px] h-[46px] bg-[#EAE7B1] hover:bg-[#A6BB8D]' type='submit'>Update changes</button>
+                          </div>
                 </div>
 
             </div>

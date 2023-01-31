@@ -34,7 +34,10 @@ const SignIn = () => {
     };
     
     const cb = () => {
-      navigate("/");
+      setTimeout(() => {
+        navigate('/');
+      }, 3000)
+      // navigate("/");
     }
 
     return (
@@ -68,7 +71,7 @@ const SignIn = () => {
             </div>
 
             {message && (
-              <div className="p-4 bg-red-200 border-2 border-red-300 rounded-xl mb-5 text-center">
+              <div className="flex justify-center items-center p-4 ml-20 mt-5 h-5 w-[320px] bg-yellow-200 border-2 border-red-300 rounded-xl">
                 {message}
               </div>
             )}
@@ -82,7 +85,7 @@ const SignIn = () => {
             validationSchema={LoginSchema}>
               {({errors, touched, dirty}) => (
                 <Form>
-                  <div className="pl-20 pb-0 pt-12 text-base">
+                  <div className="pl-20 mt-14 pb-0 pt-1 text-base">
                       <label for="email">Email</label>
                   </div>
                   <div className="pl-20 pb-0 pt-3">
@@ -99,12 +102,12 @@ const SignIn = () => {
                       />
                       {showPassword ? (
                           <Eye
-                            className="absolute right-48 top-[445px]"
+                            className="absolute right-[70px] xl:right-[190px] lg:right-[120px] md:right-[200px] top-[510px] xl:top-[380px] lg:top-[405px] md:top-[470px]"
                             onClick={() => setShowPassword(!showPassword)}
                           />
                         ) : (
                           <EyeOff
-                            className="absolute right-48 top-[445px]"
+                            className="absolute right-[70px] xl:right-[190px] lg:right-[120px] md:right-[200px] top-[510px] xl:top-[380px] lg:top-[405px] md:top-[470px]"
                             onClick={() => setShowPassword(!showPassword)}
                           />
                       )}
