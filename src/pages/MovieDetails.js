@@ -1,11 +1,20 @@
 import React from 'react'
-import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import jwt_decode from "jwt-decode";
+import { useParams, useNavigate } from 'react-router-dom';
 import Header2 from '../components/Header2';
 import Footer from '../components/Footer';
 import BorderListCinemas from '../components/BorderListCinema';
 import http from '../helpers/http';
+import transaction from './redux/reducers/transaction';
+import Skeleton from '../components/Skeleton';
 
 const MovieDetails = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
+  // console.log(token)
+  const { id } = jwt_decode(token);
   const { id: getId } = useParams();
   const [movieId, setMovieId] = React.useState(null);
   const fetchMovieId = async () => {
@@ -19,72 +28,211 @@ const MovieDetails = () => {
   React.useEffect(() => {
     fetchMovieId();
   }, []);
+
+  const Today = new Date().toLocaleDateString("en-ca");
+
+  const [selectDate, setSelectDate] = React.useState("");
+  const [selectCity, setSelectCity] = React.useState("");
+  const [selectTime, setSelectTime] = React.useState(null);
+  const [selectCinema, setSelectCinema] = React.useState(null);
+
+  //FETCHING CINEMA
+  const [cinema, setCinema] = React.useState([]);
+  // console.log(cinema)
+
+  const fetchCinema = async () => {
+    try {
+      const response = await http(token).get(
+        `/movieDetails/${getId}/schedules?date=${selectDate}&city=${selectCity}`
+      );
+      // console.log(response)
+      setCinema(response?.data?.results);
+    } catch (error) {
+      if (error) console.log(error);
+    }
+  };
+  React.useEffect(() => {
+    fetchCinema();
+  }, [selectCity, selectDate]);
+
+  //handle select time
+  const handleSelectTime = (item, cinemaId) => {
+    setSelectTime(item);
+    setSelectCinema(cinemaId);
+  };
+
+  //handle onsubmit book now
+
+  const [errorSelectedTime, setErrorSelectedTime] = React.useState(false);
+  const [errorSelectedDate, setErrorSelectedDate] = React.useState(false);
+  const movieTitle = movieId?.title;
+  const handleSubmitBookNow = async (
+    cinemaName,
+    price,
+    movieSchedulesId,
+    cinemaPicture
+  ) => {
+    try {
+      if (!selectDate) {
+        setErrorSelectedDate("Please select date...");
+        setTimeout(() => {
+          setErrorSelectedDate(false);
+        }, 3000);
+      } else if (!selectTime) {
+        setErrorSelectedTime("Please select time...");
+        setTimeout(() => {
+          setErrorSelectedTime(false);
+        }, 3000);
+      } else {
+        dispatch(
+          transaction({
+            bookingDate: selectDate,
+            userId: id,
+            movieId: getId,
+            cinemaId: selectCinema,
+            time: selectTime,
+            cinemaName,
+            price,
+            movieSchedulesId,
+            cinemaPicture,
+            movieTitle,
+          })
+        );
+        navigate("/OrderPage");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
     return (
         <div>
             <div> <Header2></Header2> </div>
-            <div className='flex flex-col md:flex-row pt-[40px] pb-[96px] bg-[#A6BB8D]'>
-                <div className='ml-[40px] md:ml-[110px] border-2 rounded-2xl w-[320px] h-[390px] md:h-[200px] xl:h-[380px] lg:h-[250px]'>
-                    <div className='flex justify-center items-center'>
-                        <img className='px-5 py-5 md:px-2 py-2 pr-0 w-[240px] rounded-lg' src={movieId?.pictures} alt="mv-poster" />
-                    </div>
-                </div>
 
-                <div className='pl-[80px] pr-5'>
-
-                  <div>
-                      <h2 className='font-mulish text-xl font-bold pb-2'>{movieId?.movieTitle}</h2>
-                      <div className='font-mulish text-sm text-[#4E4B66] pb-10'>{movieId?.genre}</div>
+            {movieId ? (
+              <div key="" className='flex flex-col md:flex-row pt-[40px] pb-[96px] bg-[#A6BB8D]'>
+                  <div className='p-5 ml-[40px] md:ml-[110px] border-2 rounded-2xl w-[200px] md:w-[200px] xl:w-[350px] lg:w-[400px] h-[300px] md:h-[200px] xl:h-[350px] lg:h-[250px]'>
+                      <div className='flex justify-center items-center'>
+                          <img className='rounded-lg' src={movieId?.pictures} alt="mv-poster" />
+                      </div>
                   </div>
 
-                  <div className='flex flex-1'>
+                  <div className='pl-[80px] pr-5'>
+
                     <div>
-                      <div className='text-xs text-[#4E4B66] font-mulish'>Release date</div>
-                      <div className='text-sm font-mulish pb-6'>{movieId?.releaseDate}</div>
-                      <div className='text-xs text-[#4E4B66] font-mulish'>Duration</div>
-                      <div className='text-sm font-mulish'>{movieId?.duration}</div>
+                        <h2 className='font-mulish text-xl font-bold pb-2'>{movieId?.movieTitle}</h2>
+                        <div className='font-mulish text-sm text-[#4E4B66] pb-10'>{movieId?.genre}</div>
+                    </div>
+
+                    <div className='flex flex-1'>
+                      <div>
+                        <div className='text-xs text-[#4E4B66] font-mulish'>Release date</div>
+                        <div className='text-sm font-mulish pb-6'>{movieId?.releaseDate}</div>
+                        <div className='text-xs text-[#4E4B66] font-mulish'>Duration</div>
+                        <div className='text-sm font-mulish'>{movieId?.duration}</div>
+                      </div>
+                      <div>
+                        <div className='text-xs text-[#4E4B66] font-mulish pl-10'>Directed by</div>
+                        <div className='text-sm font-mulish pb-6 pl-10'>{movieId?.director}</div>
+                        <div className='text-xs text-[#4E4B66] font-mulish pl-10'>Casts</div>
+                        <div className='text-sm font-mulish pl-10 pb-10'>{movieId?.casts},...</div>
+                      </div>
+                    </div>
+                    <hr />
+                    <div>
+                        <p className='pt-5 font-mulish font-bold text-md'>Synopsis</p>
                     </div>
                     <div>
-                      <div className='text-xs text-[#4E4B66] font-mulish pl-10'>Directed by</div>
-                      <div className='text-sm font-mulish pb-6 pl-10'>{movieId?.director}</div>
-                      <div className='text-xs text-[#4E4B66] font-mulish pl-10'>Casts</div>
-                      <div className='text-sm font-mulish pl-10 pb-10'>{movieId?.casts},...</div>
+                      <p className='break-all font-mulish text-md'>{movieId?.synopsis}</p>
                     </div>
                   </div>
-                  <hr />
-                  <div>
-                      <p className='pt-5 font-mulish font-bold text-md'>Synopsis</p>
-                  </div>
-                  <div>
-                    <p className='break-all font-mulish text-md'>{movieId?.synopsis}</p>
-                  </div>
-                </div>
-            </div>
+              </div>
+            ) : (
+              <Skeleton />
+            )}
 
-            <section className=''>
-            <div className=''>
-                <div className='bg-[#EAE7B1]'>
+            <section>
+            <div>
+                <div key="" className='bg-[#EAE7B1]'>
                     <h2 className='flex justify-center items-center font-mulish font-bold text-xl pt-[70px] pb-[40px]'>Showtimes and Tickets</h2>
                     <div className='flex justify-center items-center pb-[72px]'>
-                        <input className='mr-5 border border-2 rounded-lg w-[200px] h-[35px] p-5' type="date" name="dates" id="dates" placeholder="10/22/2022" />
-                        <select className='mr-5 border border-2 rounded-lg w-[200px] h-[35px] p-5' name="city-select" id="city-select">Purwokerto</select>
+                        <input 
+                        className='p-5 rounded-md w-[220px] mr-5' 
+                        type="date" 
+                        name="dates"
+                        onChange={(e) => setSelectDate(e.target.value)} 
+                        min={Today} />
+                        <select className='p-5 rounded-md w-[220px]' name="city-select" id="city-select" onChange={(e) => setSelectCity(e.target.value)}>
+                          <option value="" className="hidden">
+                              Select city
+                          </option>
+                          <option value="Karawang">Karawang</option>
+                          </select>
                     </div>
                     
                     <div className='inline-block'>
-                        <div className='rounded-lg w-[320px] h-[300px] bg-[#A6BB8D] ml-[30px] md:ml-[110px]'>
+                      {cinema?.map((cinema) => ( 
+                        <div className='rounded-lg w-[320px] h-[320px] bg-[#A6BB8D] ml-[0px] md:ml-[110px]'>
                             <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
                                 <div className='pt-3'>
-                                    <img src={require('../assets/images/ebv-logo.png')} alt="ebv-logo" />
+                                    <img src={cinema?.picture} className="W-[50px] h-[50px]" alt="logo-cinemas" />
                                 </div>
                                 <div className='pl-5'>
-                                    <h3 className='font-mulish text-xl font-bold pb-1'>ebv.id</h3>
-                                    <p className='font-mulish text-xs text-[#6E7191] w-[162px]'>Whatever street No.12, South Purwokerto</p>
+                                    <h3 className='font-mulish text-xl font-bold pb-1'>{cinema?.name}</h3>
+                                    <p className='font-mulish text-xs text-[#6E7191] w-[162px]'>{cinema?.address}</p>
                                 </div>
                             </div>
                             <hr />
-                        <div><BorderListCinemas></BorderListCinemas></div>
+                        {/* <div><BorderListCinemas></BorderListCinemas></div> */}
+                        <div className="grid grid-cols-4 mt-5 mb-5 text-center gap-2">
+                          {cinema?.time.map((item, index) => (
+                            <button
+                              onClick={() => handleSelectTime(item, cinema.id)}
+                              key={String(index)}
+                              className={
+                                selectTime === item && selectCinema === cinema.id
+                                  ? "text-[#EAE7B1] text-center"
+                                  : "text-black font-light text-base"
+                              }
+                            >
+                              {item.split(":")[0] + ":" + item.split(":")[1] + " WIB"}
+                            </button>
+                          ))}
                         </div>
+                            <div className="grid grid-cols-2">
+                              <div className="">Price</div>
+                              <div className="text-right font-bold">
+                                Rp {Number(cinema.price).toLocaleString("id")}/seat
+                              </div>
+                            </div>
+                        <div className='flex justify-center items-center pt-5'>
+                          <button
+                            onClick={() =>
+                              handleSubmitBookNow(
+                                cinema?.name,
+                                cinema?.price,
+                                cinema?.movieSchedulesId,
+                                cinema?.picture
+                              )
+                            }
+                            className="font-mulish block w-9/12 h-10 bg-[#61876E] w-[200px] hover:bg-[#3C6255] border rounded-lg"
+                          >
+                            Book Now
+                          </button>
+                        </div>
+                        {errorSelectedTime && (
+                          <div className="text-red-500 text-center font-bold text-lg">
+                            {errorSelectedTime}
+                          </div>
+                        )}
+                        {errorSelectedDate && (
+                          <div className="text-red-500 text-center font-bold text-lg">
+                            {errorSelectedDate}
+                          </div>
+                        )}
+                        </div>
+                      ))}
                     </div>
-
+{/* 
                     <div className='inline-block pt-10 pl-0 md:pl-7'>
                         <div className='rounded-lg w-[320px] h-[300px] bg-[#A6BB8D] ml-[30px] md:ml-[110px]'>
                             <div className='grid grid-cols-[100px_minmax(150px,_1fr)_100px] p-5'>
@@ -163,16 +311,16 @@ const MovieDetails = () => {
                             <hr />
                         <div><BorderListCinemas></BorderListCinemas></div>
                         </div>
-                    </div>
+                    </div> */}
 
                 </div>
             </div>
         </section>
 
             <div className='flex bg-[#EAE7B1] pt-[50px] pb-[50px]'>
-                <div className='flex-1 pt-[10px] pl-[110px]'><hr className='border-[#61876E]' /></div>
+                <div className='flex-1 pt-[10px] pl-[10px] md:pl-[110px]'><hr className='border-[#61876E]' /></div>
                 <div className='font-mulish text-sm pl-10 pr-10'>view more</div>
-                <div className='flex-1 pt-[10px] pr-[110px]'><hr className='border-[#61876E]' /></div>
+                <div className='flex-1 pt-[10px] pr-[10px] md:pr-[110px]'><hr className='border-[#61876E]' /></div>
             </div>
 
         <div> <Footer></Footer> </div>

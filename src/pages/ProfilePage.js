@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { Eye, EyeOff } from "react-feather";
+import { Eye, EyeOff, Edit } from "react-feather";
 import { logoutAction } from './redux/reducers/auth';
 import { useSelector, useDispatch } from 'react-redux';
 import Header2 from '../components/Header2';
@@ -35,10 +35,11 @@ const ProfilePage = () => {
   //   dispatch(logoutAction());
   // };
 
-  // get data Profile
+  // handle get data Profile
+
   const [getProfile, setGetProfile] = React.useState({});
-  // console.log(`https://192.168.1.9:8888/assets/uploads/${getProfile?.picture}`);
   const token = useSelector(state => state.auth.token);
+
   const getDataProfile = async () => {
     try {
       const response = await http(token).get('/profile');
@@ -57,52 +58,91 @@ const ProfilePage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
-  // update data profile
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [phoneNUm, setPhoneNUm] = React.useState('');
 
+
+  // handle update data profile
   const [successMessage, setSuccessMessage] = React.useState('');
 
-  const updateDataUser = async () => {
+  const updateDataUser = async (e) => {
+    e.preventDefault();
+    const firstName = e.target.firstName.value;
+    const lastName = e.target.lastName.value;
+    const email = e.target.email.value;
+    const phoneNUm = e.target.phoneNUm.value;
+
     try {
-      const response = await http(token).patch('/profile/updated', {
-        firstName,
-        lastName,
-        email,
-        phoneNUm,
-      });
+      const form = new FormData();
+      form.append("firstName", firstName)
+      form.append("lastName", lastName)
+      form.append("email", email)
+      form.append("phoneNUm", phoneNUm)
+
+      const { data } = await http(token).patch('/profile/updated', form);
+
       setSuccessMessage('Data succes updated!');
-      setTimeout(() => {}, 2000);
-      return response;
+      setTimeout(() => {
+        setSuccessMessage(false)
+      }, 2000);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // change password
+  // handle change password
 
   const [showPassword, setShowPassword] = React.useState(false);
   const [showPassword2, setShowPassword2] = React.useState(false);
   const [passwordMsgSuccess, setPasswordMsgSuccess] = React.useState('');
   const [samePasswordMessage, setSamePasswordMessage] = React.useState('');
-  const changeUpdatePassword = async values => {
+
+
+  const changeUpdatePassword = async (value) => {
+    
     try {
-      if (values.password === values.confirmPassword) {
-        const {password, confirmPassword} = values;
+      if (value.password === value.confirmPassword) {
+        const password  = value.password;
+        console.log(password)
         const response = await http(token).patch('/profile/updated', {
           password,
-          confirmPassword,
         });
         setPasswordMsgSuccess('Password succes updated!');
-        setTimeout(() => {}, 2000);
+        setTimeout(() => {
+          setPasswordMsgSuccess(false)
+        }, 2000);
         return response;
       } else {
         setSamePasswordMessage('Password and confirm password not match');
+        setTimeout(() => {
+          setSamePasswordMessage(false)
+        }, 2000);
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+
+  // handle upload photo
+
+  const [msgSuccessUpload, setMsgSuccessUpload] = React.useState("");
+  const [msgErrorUpload, setMsgErrorUpload] = React.useState("");
+
+  const uploadPhoto = async (e) => {
+    try {
+      const file = e.target.files[0];
+      if(file.size > 2000000){
+        setMsgSuccessUpload('')
+        return setMsgErrorUpload('Maximum file size 2MB')
+      }
+      const form = new FormData();
+      form.append("picture", file);
+      const { data } = await http(token).patch("/profile/updated", form);
+      setMsgSuccessUpload('Photo profile updated')
+      setMsgErrorUpload('')
+    } catch (error) {
+      console.log(error);
+      setMsgErrorUpload(error)
+      setMsgSuccessUpload('')
     }
   };
 
@@ -115,6 +155,7 @@ const ProfilePage = () => {
                 <div className='pt-14 pl-28'>
                     <div className='bg-[#EAE7B1] w-[328px] h-[430px] rounded-lg p-10'>
                         <p className='font-mulish'>INFO</p>
+
                         <div className='flex justify-center items-center'>
                           {getProfile?.picture ? (
                             <img src={getProfile?.picture} alt="profile" className='rounded-full w-[100px]' />
@@ -122,12 +163,42 @@ const ProfilePage = () => {
                             <img src={require('../assets/images/dummyAvatar.jpg')} className="rounded-full w-[100px]" alt="profile" />
                           )}
                         </div>
+
+                        <div className="flex gap-2 items-center justify-center">
+                          <label htmlFor="picture" className="hover:cursor-pointer absolute left-[295px] top-[335px]">
+                            <Edit className="text-sm w-[20px] h-[20px] bg-[#3C6255] text-[#EAE7B1] rounded" />
+                          </label>
+                          <input className="hidden" type="file" onChange={uploadPhoto} name="picture" id="picture" />
+                        </div>
+
                         <div className='flex justify-center items-center font-bold'> {getProfile?.firstName} {getProfile?.lastName}</div>
                         <div className='flex justify-center items-center font-mulish text-sm text-[#4E4B66] pt-2 pb-10'>Eastick People</div>
+
                         <hr className='border-[#A6BB8D]' />
+
                         <div className='pt-5 flex justify-center'>
                             <button onClick={() => dispatch(logoutAction())} className='border rounded-lg w-[187px] h-[46px] hover:bg-[#61876E] bg-[#A6BB8D]' type='button'>Log Out</button>
                         </div>
+
+                        {msgSuccessUpload && (
+                          <div className="alert alert-success shadow-lg mt-5">
+                            <div>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              <span>{msgSuccessUpload}</span>
+                            </div>
+                          </div>
+                        )}
+
+                        {msgErrorUpload && (
+                          <div className="alert alert-error shadow-lg mt-5">
+                          <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <span>{msgErrorUpload}</span>
+                          </div>
+                        </div>
+                        )}
                     </div>
                 </div>
 
@@ -146,34 +217,45 @@ const ProfilePage = () => {
                     <div className='bg-[#EAE7B1] mt-10 w-[930px] rounded-lg p-10'>
                         <p className='font-mulish pb-3'>Details Information</p>
                         <hr className='border-[#A6BB8D]' />
-                        <form className='pt-5'>
+
+                        <form onSubmit={updateDataUser} className='pt-5'>
+                          {successMessage && 
+                            <div className="flex justify-center items-center p-4 ml-20 mt-5 h-5 w-[320px] bg-yellow-200 border-2 border-red-300 rounded-xl">
+                              {successMessage}
+                            </div> 
+                          }
                             <div className='inline-block '>
-                                <label className='block pb-2' for="fname">First Name</label>
-                                <input onChange={ (e) => setFirstName(e.target.value)} className='border  w-[300px] h-[40px] rounded pl-2' type="text" name="firstName" placeholder={getProfile?.firstName}/>
+                                <label className='block pb-2' for="firstName">First Name</label>
+                                <input className='border  w-[300px] h-[40px] rounded pl-2' type="text" name="firstName" placeholder={getProfile?.firstName}/>
                             </div>
+
                             <div className='inline-block pl-5'>
-                                <label className='block pb-2' for="lname">Last Name</label>
-                                <input onChange={ (e) => setLastName(e.target.value)} className='border w-[300px] h-[40px] rounded pl-2' type="text" name="lastName" placeholder={getProfile?.lastName}/>
+                                <label className='block pb-2' for="lastName">Last Name</label>
+                                <input className='border w-[300px] h-[40px] rounded pl-2' type="text" name="lastName" placeholder={getProfile?.lastName}/>
                             </div>
+
                             <div className='inline-block pt-3'>
                                 <label className='block pb-2' for="email">Email</label>
-                                <input onChange={ (e) => setEmail(e.target.value)} className='border w-[300px] h-[40px] rounded pl-2' type="text" name="email" placeholder={getProfile?.email}/>
+                                <input className='border w-[300px] h-[40px] rounded pl-2' type="text" name="email" placeholder={getProfile?.email}/>
                             </div>
+
                             <div className='inline-block pl-5'>
-                                <label className='block pb-2' for="phone-numb">Phone Number</label>
+                                <label className='block pb-2' for="phoneNum">Phone Number</label>
                                 <div className='border w-[300px] h-[40px] rounded p-2 bg-white'>
-                                    <input className='w-[40px] border-r-2' type="text" name="phoneNUm" placeholder="+62"/>
-                                    <input onChange={ (e) => setPhoneNUm(e.target.value)} className='pl-2' type="text" name="phoneNUm" placeholder={getProfile?.phoneNUm}/>
+                                    <input className='w-[40px] border-r-2' type="text" placeholder="+62"/>
+                                    <input className='pl-2' type="text" name="phoneNUm" placeholder={getProfile?.phoneNUm}/>
                                 </div>
                             </div>
+
+                            <div className='pt-5'>
+                                <button  className='border rounded-lg w-[320px] h-[46px] bg-[#61876E] hover:bg-[#A6BB8D]' type='submit'>Update changes</button>
+                            </div>
+
                         </form>
                     </div>
 
-                    <div className='pt-5'>
-                        <button onSubmit={updateDataUser} className='border rounded-lg w-[320px] h-[46px] bg-[#EAE7B1] hover:bg-[#A6BB8D]' type='button'>Update changes</button>
-                    </div>
 
-                    <div className='bg-[#EAE7B1] mt-10 w-[930px] rounded-lg p-10'>
+                    <div className='bg-[#EAE7B1] mt-10 w-[930px] rounded-lg p-10 mb-10'>
                     <p className='font-mulish pb-3'>Account and Privacy</p>
                     <hr className='border-[#A6BB8D]' />
                     <div className='pt-5'>
@@ -183,7 +265,18 @@ const ProfilePage = () => {
                       onSubmit={changeUpdatePassword}
                       >
                         {({errors, touched}) => (
-                        <Form className='flex'>
+                        <Form className='flex flex-col'>
+                          {passwordMsgSuccess &&
+                            <div className="flex justify-center items-center p-4 ml-20 mt-5 h-5 w-[320px] bg-yellow-200 border-2 border-red-300 rounded-xl">
+                            {passwordMsgSuccess}
+                            </div>
+                          }
+
+                          {samePasswordMessage && 
+                            <div className="flex justify-center items-center p-4 ml-20 mt-5 h-5 w-[350px] bg-red-200 border-2 border-red-300 rounded-xl">
+                            {samePasswordMessage}
+                            </div>
+                          }
                             <div class="privacy-content1">
                                 <label className='block' for="Nwpassword">New Password</label>
                                 <Field className='border w-[300px] h-[40px] rounded pl-2' type={showPassword ? "text" : "password"} name="password" placeholder="Write your password"/>
@@ -202,7 +295,7 @@ const ProfilePage = () => {
                                   <div className="text-red-500">{errors.password}</div>
                                 ) : null}
                             </div>
-                            <div className='pl-5'>
+                            <div className='pt-5'>
                                 <label className='block' for="confirm-pwd">Confirm Password</label>
                                 <Field className='border w-[300px] h-[40px] rounded pl-2' type={showPassword ? "text" : "password"} name="confirmPassword" placeholder="Write your confirm password"/>
                                 {showPassword2 ? (
@@ -224,14 +317,14 @@ const ProfilePage = () => {
                                 ) : null}
                             </div>
 
+                          <div className='pt-5 pb-5'>
+                              <button className='border rounded-lg w-[320px] h-[46px] bg-[#61876E] hover:bg-[#A6BB8D]' type='submit'>Update changes</button>
+                          </div>
                         </Form>
                         )}
                       </Formik>
                     </div>
                 </div>
-                          <div className='pt-5 pb-5'>
-                              <button onSubmit={changeUpdatePassword} className='border rounded-lg w-[320px] h-[46px] bg-[#EAE7B1] hover:bg-[#A6BB8D]' type='submit'>Update changes</button>
-                          </div>
                 </div>
 
             </div>

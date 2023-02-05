@@ -1,6 +1,6 @@
 const Skeleton = () => {
   return (
-    <div class="shadow rounded-md p-4 max-w-sm w-full mx-auto">
+    <div class="shadow rounded-md p-4  w-full mx-auto bg-[#A6BB8D]">
       <div class="animate-pulse flex space-x-4">
         <div class="flex-1 justify-center items-center">
           <div class="w-full text-center bg-slate-200 rounded"></div>
