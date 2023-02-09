@@ -1,10 +1,79 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import moment from "moment/moment"
+
+import { chooseSeat } from './redux/reducers/transaction';
 import Header2 from '../components/Header2';
 import Footer from '../components/Footer';
-import { Link } from 'react-router-dom';
 
 
 const OrderPage = () => {
+const token = useSelector((state) => state.auth.token)
+const navigate = useNavigate();
+const dispatch = useDispatch();
+const bookingDate = useSelector((state) => state.transaction.bookingDate);
+const price = useSelector((state) => state.transaction.price);
+const movieTitle = useSelector((state) => state.transaction.movieTitle);
+const time= useSelector((state) => state.transaction.time);
+const cinemaName = useSelector((state) => state.transaction.cinemaName)
+const cinemaPicture = useSelector((state) => state.transaction.cinemaPicture)
+const movieSchedulesId = useSelector((state) => state.transaction.movieSchedulesId)
+// const price = 75000;
+console.log(movieSchedulesId)
+
+//set date
+const date = moment(bookingDate).format("LLLL").split(" ");
+const day = date[0];
+const month = date[1];
+const newDate = date[2];
+const year = date[3];
+const fixDate = `${day} ${month} ${newDate} ${year}`;
+
+
+//set seatnum
+const alphabet = ["A", "B", "C", "D", "E", "F", "G"];
+const column1 = [1, 2, 3, 4, 5, 6, 7];
+const column2 = [8, 9, 10, 11, 12, 13, 14];
+
+const [selectSeat, setSelectSeat] = React.useState([]);
+const [errorMessage, setErrorMessage] = React.useState(null);
+
+const handleChooseSeat = (seat) => {
+  if (!selectSeat.includes(seat)) {
+    setSelectSeat([...selectSeat, seat].sort());
+  } else {
+    setSelectSeat(selectSeat.filter((e) => e !== seat));
+  }
+};
+const totalPrice = Number(selectSeat.length * price).toLocaleString("id");
+// const movieTitle = movieId.movieTitle
+// console.log(movieTitle)
+
+// handle for choose seat to payment
+const handleChekOut = () => {
+  try {
+    if (selectSeat.length) {
+      dispatch(
+        chooseSeat({
+          movieTitle: movieTitle,
+          seatNum: selectSeat,
+          totalPrice: selectSeat.length * price,
+        })
+      )
+      navigate("/PaymentPage")
+    } else {
+      setErrorMessage("Please choose your seat");
+      setTimeout(() => {
+        setErrorMessage(false);
+      }, 3000);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
     return (
         <div>
             <div> <Header2></Header2> </div>
@@ -15,8 +84,12 @@ const OrderPage = () => {
                         <div className='pl-28 pt-7 pb-10 '>
                             <h2 className='text-xl font-mulish font-bold pb-5'>Movie Selected</h2>
                             <div className='rounded-lg bg-[#EAE7B1] w-[820px] h-[90px] flex justify-between p-7'>
-                                <h2 className='font-mulish text-lg font-bold'>Spider-Man: Homecoming</h2>
-                                <button className='bg-[#A6BB8D] hover:bg-[#61876E] font-mulish font-bold text-xs text-center p-2 rounded ' type='button'>Change Movie</button>
+                                <h2 className='font-mulish text-lg font-bold'>{movieTitle}</h2>
+                                <Link to="/ListMovie">
+                                  <button className='bg-[#A6BB8D] hover:bg-[#61876E] font-mulish font-bold text-xs text-center p-2 rounded ' type='button'>
+                                    Change Movie
+                                  </button>
+                                </Link>
                             </div>
                         </div>
 
@@ -25,141 +98,52 @@ const OrderPage = () => {
                 </div>
             <div className=' ml-28 pt-7 pb-5 bg-[#EAE7B1] w-[820px] rounded-lg'>
                 <div className='flex justify-center items-center pl-7 pb-2'>Screen</div>
-                <div className='border h-2 rounded bg-[#A6BB8D] mr-[105px] ml-[140px]'></div>
-                <div className='flex justify-center items-center'>
-                    <div className='grid grid-cols-[30px_30px_30px_30px_30px_30px_30px_30px] grid-rows-[30px_30px_30px_30px_30px_30px_30px_30px_30px] gap-1 pt-5' >
-                        <div className=''>A</div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className=''>B</div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className=''>C</div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className=''>D</div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className=''>E</div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className=''>F</div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className=''>G</div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='text-center'></div>
-                        <div className='text-center'>1</div>
-                        <div className='text-center'>2</div>
-                        <div className='text-center'>3</div>
-                        <div className='text-center'>4</div>
-                        <div className='text-center'>5</div>
-                        <div className='text-center'>6</div>
-                        <div className='text-center'>7</div>
-                    </div>
-    
-                    <div className='grid grid-cols-[30px_30px_30px_30px_30px_30px_30px_30px] grid-rows-[30px_30px_30px_30px_30px_30px_30px_30px_30px] gap-1 pt-5 pl-[72px]'>
-                    <div className=''></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className=''></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className=''></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className=''></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className=''></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className=''></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className=''></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='bg-[#F5F6F8] hover:bg-[#A6BB8D] cursor-pointer rounded'></div>
-                        <div className='text-center'></div>
-                        <div className='text-center'>8</div>
-                        <div className='text-center'>9</div>
-                        <div className='text-center'>10</div>
-                        <div className='text-center'>11</div>
-                        <div className='text-center'>12</div>
-                        <div className='text-center'>13</div>
-                        <div className='text-center'>14</div>
-                    </div>
+                <div className='border h-2 rounded bg-[#A6BB8D] mr-[175px] ml-[175px]'></div>
+                <div className="flex justify-center items-center flex-row gap-6 pt-5">
+                  <div>
+                    {alphabet.map((alpha, i) => {
+                      return (
+                        <div key={String(i)} className="flex-row flex">
+                          {column1.map((num, index) => {
+                            const seat = alpha + num;
+                            return (
+                              <button
+                                onClick={() => handleChooseSeat(seat)}
+                                key={String(index)}
+                                className={
+                                  selectSeat.includes(seat)
+                                    ? "rounded-md m-0.5 h-7 w-7 max-[768px]:h-[1rem] max-[768px]:w-[1rem] max-[425px]:h-5 max-[425px]:w-5 max-[375px]:h-3.5 max-[375px]:w-3.5 bg-[#A6BB8D]"
+                                    : "rounded-md m-0.5 h-7 w-7 max-[768px]:h-[1rem] max-[768px]:w-[1rem] max-[425px]:h-5 max-[425px]:w-5 max-[375px]:h-3.5 max-[375px]:w-3.5 bg-[#F5F6F8]"
+                                }
+                              ></button>
+                            );
+                          })}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div>
+                    {alphabet.map((alp, i) => {
+                      return (
+                        <div key={String(i)} className="flex-row flex">
+                          {column2.map((num, index) => {
+                            const seat = alp + num;
+                            return (
+                              <button
+                                onClick={() => handleChooseSeat(seat)}
+                                key={String(index)}
+                                className={
+                                  selectSeat.includes(seat)
+                                    ? "rounded-md m-0.5 h-7 w-7 max-[768px]:h-[1rem] max-[768px]:w-[1rem] max-[425px]:h-5 max-[425px]:w-5 max-[375px]:h-3.5 max-[375px]:w-3.5 bg-[#A6BB8D]"
+                                    : "rounded-md m-0.5 h-7 w-7 max-[768px]:h-[1rem] max-[768px]:w-[1rem] max-[425px]:h-5 max-[425px]:w-5 max-[375px]:h-3.5 max-[375px]:w-3.5 bg-[#F5F6F8]"
+                                }
+                              ></button>
+                            );
+                          })}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div className='pl-28 pt-7 pb-5'>
@@ -187,10 +171,17 @@ const OrderPage = () => {
                     <button className='border rounded-lg font-mulish font-bold  text-sm w-[300px] h-[56px] bg-[#EAE7B1] hover:bg-[#A6BB8D]'>Change Your Movie</button>
                   </Link>
 
-                  <Link to="/PaymentPage">
-                    <button className='mr-[65px] font-mulish text-sm  font-bold border rounded-lg w-[300px] h-[56px] bg-[#EAE7B1] hover:bg-[#A6BB8D]'>Checkout Now</button>
-                  </Link>
+                    <button 
+                    onClick={() => handleChekOut(totalPrice)} 
+                    className='mr-[65px] font-mulish text-sm  font-bold border rounded-lg w-[300px] h-[56px] bg-[#EAE7B1] hover:bg-[#A6BB8D]'>
+                      Checkout Now
+                      </button>
                 </div>
+                {errorMessage && (
+                <div className="font-bold text-red-500 text-center text-lg md:block hidden">
+                  {errorMessage}
+                </div>
+              )}
             </div>
                 
                 </div>
@@ -199,29 +190,33 @@ const OrderPage = () => {
                     <div class="order-info">
                             <h2 className='pt-7 pb-4 font-mulish text-xl font-bold'>Order Info</h2>
                         <div className='bg-[#EAE7B1] w-[410px] h-[390px] p-10 rounded-lg'>
-                            <img className='pl-[100px] w-[230px] ' src={require('../assets/images/cine-logo.png')} alt="cine-logo" />
-                            <h2 className='flex justify-center items-center text-xl font-mulish'>CineOne21 Cinema</h2>
+                          <div className='flex justify-center items-center'>
+                            <img className='w-[60px] h-[50px] ' src={cinemaPicture} alt="cine-logo" />
+                          </div>
+                            <h2 className='flex justify-center items-center text-xl font-mulish'>{cinemaName}</h2>
 
                         <div className='flex justify-between pt-8 pb-5'>
                             <div className='text-zinc-500 font-mulish text-sm'>Movie selected</div>
-                            <div className=' font-mulish text-sm font-bold'>Spider-Man: Homecoming</div>
+                            <div className=' font-mulish text-sm font-bold'>{movieTitle}</div>
                         </div>
                         <div className='flex justify-between pb-5'>
-                            <div className='text-zinc-500 font-mulish text-sm'>Tuesday, 07 July 2022</div>
-                            <div className=' font-mulish text-sm font-bold'>02:00 pm</div>
+                            <div className='text-zinc-500 font-mulish text-sm'>{fixDate}</div>
+                            <div className=' font-mulish text-sm font-bold'>
+                              {time} WIB
+                            </div>
                         </div>
                         <div className='flex justify-between pb-5'>
                             <div className='text-zinc-500 font-mulish text-sm'>One ticket price</div>
-                            <div className=' font-mulish text-sm font-bold'>$10</div>
+                            <div className=' font-mulish text-sm font-bold'>Rp {Number(price).toLocaleString("id")}</div>
                         </div>
                         <div className='flex justify-between pb-5'>
                             <div className='text-zinc-500 font-mulish text-sm'>Seat choosed</div>
-                            <div className=' font-mulish text-sm font-bold'>C4, C5, C6</div>
+                            <div className=' font-mulish text-sm font-bold'>{selectSeat.length ? selectSeat.join(", ") : "-"}</div>
                         </div>
                         <div className='border border-[#A6BB8D] p-0'></div>
-                        <div className='flex justify-between pt-10'>
+                        <div className='flex justify-between pt-5'>
                             <div className='font-mulish text-lg'>Total Payment</div>
-                            <div className='font-mulish text-lg font-bold '>$30</div>
+                            <div className='font-mulish text-lg font-bold '>Rp {totalPrice}</div>
                         </div>
                         </div>
                     </div>

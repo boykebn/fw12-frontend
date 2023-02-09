@@ -4,9 +4,9 @@ import jwt_decode from "jwt-decode";
 import { useParams, useNavigate } from 'react-router-dom';
 import Header2 from '../components/Header2';
 import Footer from '../components/Footer';
-import BorderListCinemas from '../components/BorderListCinema';
+// import BorderListCinemas from '../components/BorderListCinema';
 import http from '../helpers/http';
-import transaction from './redux/reducers/transaction';
+import {selectCinemas} from './redux/reducers/transaction';
 import Skeleton from '../components/Skeleton';
 
 const MovieDetails = () => {
@@ -35,6 +35,7 @@ const MovieDetails = () => {
   const [selectCity, setSelectCity] = React.useState("");
   const [selectTime, setSelectTime] = React.useState(null);
   const [selectCinema, setSelectCinema] = React.useState(null);
+  const [selectPrice, setSelectPrice] = React.useState("")
 
   //FETCHING CINEMA
   const [cinema, setCinema] = React.useState([]);
@@ -56,22 +57,18 @@ const MovieDetails = () => {
   }, [selectCity, selectDate]);
 
   //handle select time
-  const handleSelectTime = (item, cinemaId) => {
+  const handleSelectTime = (item, cinemaId, price) => {
     setSelectTime(item);
     setSelectCinema(cinemaId);
+    setSelectPrice(price);
   };
 
   //handle onsubmit book now
 
   const [errorSelectedTime, setErrorSelectedTime] = React.useState(false);
   const [errorSelectedDate, setErrorSelectedDate] = React.useState(false);
-  const movieTitle = movieId?.title;
-  const handleSubmitBookNow = async (
-    cinemaName,
-    price,
-    movieSchedulesId,
-    cinemaPicture
-  ) => {
+  // const moviesId = movieId?.id;
+  const handleSubmitBookNow = async (cinemaName, price, movieSchedulesId, cinemaPicture) => {
     try {
       if (!selectDate) {
         setErrorSelectedDate("Please select date...");
@@ -85,24 +82,26 @@ const MovieDetails = () => {
         }, 3000);
       } else {
         dispatch(
-          transaction({
+          selectCinemas({
+            movieTitle: movieId.movieTitle,
             bookingDate: selectDate,
             userId: id,
             movieId: getId,
             cinemaId: selectCinema,
             time: selectTime,
+            price: selectPrice,
             cinemaName,
-            price,
-            movieSchedulesId,
             cinemaPicture,
-            movieTitle,
+            movieSchedulesId,
           })
-        );
+          );
+          // console.log(cinema.picture)
         navigate("/OrderPage");
       }
     } catch (err) {
       console.log(err);
     }
+    console.log("masuk nih")
   };
     return (
         <div>
@@ -186,7 +185,7 @@ const MovieDetails = () => {
                         <div className="grid grid-cols-4 mt-5 mb-5 text-center gap-2">
                           {cinema?.time.map((item, index) => (
                             <button
-                              onClick={() => handleSelectTime(item, cinema.id)}
+                              onClick={() => handleSelectTime(item, cinema.id,cinema.price)}
                               key={String(index)}
                               className={
                                 selectTime === item && selectCinema === cinema.id
@@ -210,7 +209,7 @@ const MovieDetails = () => {
                               handleSubmitBookNow(
                                 cinema?.name,
                                 cinema?.price,
-                                cinema?.movieSchedulesId,
+                                cinema?.movieschedulesid,
                                 cinema?.picture
                               )
                             }

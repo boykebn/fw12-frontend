@@ -12,9 +12,7 @@ import OrderPage from "./OrderPage";
 import PaymentPage from "./PaymentPage";
 import ProfilePage from "./ProfilePage";
 import OrderHistory from "./OrderHistory";
-import TicketResultActived from "./TicketResultActived";
-import TicketResultUsed from "./TicketResultUsed";
-import TicketResultExpired from "./TicketResultExpired";
+import TicketResult from "./TicketResult";
 import PrivateRoute from "../components/PrivateRoute";
 
 const Main = () => {
@@ -47,9 +45,7 @@ const Main = () => {
               }
             />
             <Route path="/OrderHistory" element={<OrderHistory />} />
-            <Route path="/TicketResultActived" element={<TicketResultActived />} />
-            <Route path="/TicketResultUsed" element={<TicketResultUsed />} />
-            <Route path="/TicketResultExpired" element={<TicketResultExpired />} />
+            <Route path="/TicketResult" element={<TicketResult />} />
         </Routes>      
     </BrowserRouter>
     )
