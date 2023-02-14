@@ -125,7 +125,7 @@ const MovieDetails = () => {
                     <div className='flex flex-1'>
                       <div>
                         <div className='text-xs text-[#4E4B66] font-mulish'>Release date</div>
-                        <div className='text-sm font-mulish pb-6'>{movieId?.releaseDate}</div>
+                        <div className='text-sm font-mulish pb-6'>{new Date(movieId?.releaseDate).toDateString()}</div>
                         <div className='text-xs text-[#4E4B66] font-mulish'>Duration</div>
                         <div className='text-sm font-mulish'>{movieId?.duration}</div>
                       </div>

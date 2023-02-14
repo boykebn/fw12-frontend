@@ -21,7 +21,7 @@ const cinemaName = useSelector((state) => state.transaction.cinemaName)
 const cinemaPicture = useSelector((state) => state.transaction.cinemaPicture)
 const movieSchedulesId = useSelector((state) => state.transaction.movieSchedulesId)
 // const price = 75000;
-console.log(movieSchedulesId)
+// console.log(movieSchedulesId)
 
 //set date
 const date = moment(bookingDate).format("LLLL").split(" ");

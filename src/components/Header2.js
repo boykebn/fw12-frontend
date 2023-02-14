@@ -66,7 +66,7 @@ const Header = () => {
                 {getProfile?.picture ? (
                 <a href="/" className="flex-shrink-0">
                   <img
-                    className="md:w-[50px] w-[50px] rounded-full"
+                    className="md:w-[50px] w-[50px] h-[50px] rounded-full"
                     src={getProfile?.picture}
                     alt="logo"
                   />

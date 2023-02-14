@@ -9,16 +9,22 @@ import Footer from '../components/Footer';
 import http from "../helpers/http";
 
 
-const TicketResultActived = () => {
+const TicketResult = () => {
   const { id: idTicket } = useParams();
   const [ticket, setTicket] = React.useState({});
+  console.log(ticket)
   const token = useSelector((state) => state.auth.token);
+
+  // handle time for status
+  const Today = new Date();
+
   const fetchTicket = async () => {
     try {
       const response = await http(token).get(
         `/transaction/history/${idTicket}`
       );
       setTicket(response?.data?.results);
+      // console.log(response.data.results)
     } catch (error) {
       if (error) console.log(error);
     }
@@ -27,7 +33,7 @@ const TicketResultActived = () => {
     if (token) {
       fetchTicket();
     }
-  }, [token]);
+  }, [token, ticket]);
 
   //set Date
   const date = moment(ticket.bookingDate)
@@ -41,7 +47,7 @@ const TicketResultActived = () => {
             <div><Header2></Header2></div>
             <div className='bg-[#A6BB8D] flex justify-center items-center p-24 pb-10'>
               <div className="bg-white flex flex-col items-center rounded-lg md:p-10 p-3 relative overflow-hidden w-[900px] pb-5">
-                <h1 className="text-lg font-bold mb-10">Proof of Payment</h1>
+                <h1 className="text-lg font-bold mb-5">Proof of Payment</h1>
                 <div className="w-full relative overflow-hidden md:block hidden">
                   <div className="bg-[#A6BB8D] lg:pl-20 pl-5 flex py-3 items-center rounded-t-2xl">
                     <div className="flex-1 text-white font-bold text-lg">
@@ -60,7 +66,7 @@ const TicketResultActived = () => {
                       <div className="my-4">
                         <p className="text-[#AAAAAA] leading-6 text-xs">Movie</p>
                         <h1 className="font-semibold text-base leading-8">
-                          {ticket?.title}{" "}
+                          {ticket?.moviemovieTitle}{" "}
                         </h1>
                       </div>
                       <div className="flex gap-7 mb-4">
@@ -123,16 +129,28 @@ const TicketResultActived = () => {
                       </div>
                     </div>
                     <div className="flex-1 flex justify-end mr-10">
-                      <div>
-                        <img src={require('../assets/images/QR-Code.png')} alt="" />
-                      </div>
+                      {new Date(ticket?.bookingDate) >= Today ? 
+                        <div>
+                          <img src={require('../assets/images/QR-Code.png')} alt="" />
+                        </div>
+                      :
+                        <div>
+                            <img src={require('../assets/images/expired.png')} alt="" />
+                        </div>
+                      }
                     </div>
                   </div>
                 </div>
                 <div className="w-full md:hidden block">
+                  {new Date(ticket?.bookingDate) >= Today ? 
+                    <div className="flex justify-center mb-5">
+                      <img src={require('../assets/images/QR-Code.png')} alt="QR" />
+                    </div>
+                  : 
                   <div className="flex justify-center mb-5">
-                    <img src={require('../assets/images/QR-Code.png')} alt="QR" />
-                  </div>
+                      <img src={require('../assets/images/expired.png')} alt="QR" />
+                    </div>
+                  }
                   <div className="flex flex-row items-center">
                     <div className="border-b-4 border-dashed flex-1 border-b-[#F5D5AE]"></div>
                     <div className="absolute bg-[#F5D5AE] rounded-full w-16 h-16 left-[-30px]"></div>
@@ -143,8 +161,8 @@ const TicketResultActived = () => {
                       <div>
                         <div className="text-[#AAAA]">Movie</div>
                         <div className="text-lg font-bold">
-                          {ticket?.title
-                            ? `${ticket?.title.slice(0, 7)}...`
+                          {ticket?.movieTitle
+                            ? `${ticket?.movieTitle.slice(0, 7)}...`
                             : null}
                         </div>
                       </div>
@@ -209,4 +227,4 @@ const TicketResultActived = () => {
 };
 
 
-export default TicketResultActived;
+export default TicketResult;

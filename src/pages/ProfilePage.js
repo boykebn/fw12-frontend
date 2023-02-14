@@ -158,7 +158,7 @@ const ProfilePage = () => {
 
                         <div className='flex justify-center items-center'>
                           {getProfile?.picture ? (
-                            <img src={getProfile?.picture} alt="profile" className='rounded-full w-[100px]' />
+                            <img src={getProfile?.picture} alt="profile" className='rounded-full w-[100px] h-[100px]' />
                           ) : (
                             <img src={require('../assets/images/dummyAvatar.jpg')} className="rounded-full w-[100px]" alt="profile" />
                           )}

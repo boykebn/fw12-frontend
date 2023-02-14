@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Edit } from 'react-feather';
-import moment from 'moment';
 
 
 import { cancelTransaction } from './redux/reducers/transaction';
@@ -15,7 +14,8 @@ import http from '../helpers/http';
 const OrderHistory = () => {
   const dispatch = useDispatch();
 
-  // handle get data Profile
+  // handle time for status
+  const Today = new Date();
 
   const [getProfile, setGetProfile] = React.useState({});
   const token = useSelector(state => state.auth.token);
@@ -64,9 +64,11 @@ const OrderHistory = () => {
 
    //FETCHING history transaction ID
   const [history, setHistory] = React.useState([]);
+  // console.log(history)
   const fetchHistory = async () => {
     try {
       const response = await http(token).get("/transaction/history");
+      // console.log(response)
       setHistory(response?.data?.results);
     } catch (error) {
       if (error) console.log(error);
@@ -77,7 +79,7 @@ const OrderHistory = () => {
     if (token) {
       fetchHistory();
     }
-  }, [token]);
+  }, [token, history]);
 
     return (
         <div>
@@ -91,7 +93,7 @@ const OrderHistory = () => {
 
                         <div className='flex justify-center items-center'>
                           {getProfile?.picture ? (
-                            <img src={getProfile?.picture} alt="profile" className='rounded-full w-[100px]' />
+                            <img src={getProfile?.picture} alt="profile" className='rounded-full w-[100px] h-[100px]' />
                           ) : (
                             <img src={require('../assets/images/dummyAvatar.jpg')} className="rounded-full w-[100px]" alt="profile" />
                           )}
@@ -144,42 +146,49 @@ const OrderHistory = () => {
                             <div className='border-b-2 border-[#A6BB8D] pb-6 font-bold'>Order History</div>
                         </div>
                     </div>
+
+                    {/* {history?.map((item) => (
+                      <div></div>
+                    ))} */}
                     
 
                     {history?.map((item) => {
-                      <div key={String(item.id)} className='bg-[#EAE7B1] mt-10 w-[930px] rounded-lg p-10'>
-                          <h3 className='font-mulish text-xs text-[#AAAAAA]'>
-                          {moment(item?.bookingDate)
-                            .format("LLLL")
-                            .slice(0, 25)}{" "}
-                          -{" "}
-                          {item.time.split(":")[0] +
-                            ":" +
-                            item.time.split(":")[1] +
-                            " WIB"}
-                          </h3>
-                          <div className='flex justify-between pb-10'>
-                            <h2 className='font-mulish font-bold text-xl pt-2'>{item?.movieTitle}</h2>
-                            <div class="img-history">
-                              <img className='w-[60px] h-[50px]' src={item?.picture} alt="cine-logo" />
+                      return (
+                        <div key={String(item.id)} className='bg-[#EAE7B1] mt-10 w-[930px] rounded-lg p-10 mb-10'>
+                            <h3 className='font-mulish text-xs text-[#AAAAAA]'>
+                              {new Date(item?.bookingDate).toDateString()}
+                            </h3>
+                            <div className='flex justify-between pb-10'>
+                              <h2 className='font-mulish font-bold text-xl pt-2'>{item?.movieTitle}</h2>
+                              <div class="img-history">
+                                <img className='w-[60px] h-[50px]' src={item?.picture} alt="cine-logo" />
+                              </div>
                             </div>
-                          </div>
-                          
-                          <hr className='border-[#A6BB8D]' />
+                            
+                            <hr className='border-[#A6BB8D]' />
 
-                          <div className='flex justify-between pt-5'>
-                            <Link to={"/TicketResult/" + item.id}>
-                              <div className='bg-[#00BA88] border rounded-lg w-[190px] h-[40px] text-xs p-3 font-mulish text-center text-white'>
-                                Ticket in active
-                              </div>
-                            </Link>
-                            <Link to={"/TicketResult/" + item.id}>
-                              <div className='text-[#AAAAAA] pr-10 font-mulish'>
-                                See Details
-                              </div>
-                            </Link>
-                          </div>
-                      </div>
+                            <div className='flex justify-between pt-5'>
+                              {new Date(item?.bookingDate) >= Today ? 
+                              <Link to={"/TicketResult/" + item.id}>
+                                <div className='bg-[#00BA88] border rounded-lg w-[190px] h-[40px] text-xs p-3 font-mulish text-center text-white'>
+                                  Ticket in active
+                                </div>
+                              </Link>
+                              : 
+                                <Link to={"/TicketResult/" + item.id}>
+                                <div className='bg-[#AAAAAA] border rounded-lg w-[190px] h-[40px] text-xs p-3 font-mulish text-center text-white'>
+                                  Ticket is Expired
+                                </div>
+                              </Link>
+                              }
+                              <Link to={"/TicketResult/" + item.id}>
+                                <div className='text-[#AAAAAA] pr-10 font-mulish'>
+                                  See Details
+                                </div>
+                              </Link>
+                            </div>
+                        </div>
+                      );
                     })}
 
                 </div>

@@ -45,7 +45,7 @@ const Main = () => {
               }
             />
             <Route path="/OrderHistory" element={<OrderHistory />} />
-            <Route path="/TicketResult" element={<TicketResult />} />
+            <Route path="/TicketResult/:id" element={<TicketResult />} />
         </Routes>      
     </BrowserRouter>
     )

@@ -27,6 +27,9 @@ const PaymentPage = () => {
   const seatNum = useSelector((state) => state.transaction.seatNum)
   // const fullName = useSelector((state) => state.transaction.)
 
+  let seatNums = seatNum.join(", ");
+  let booksDate = new Date(bookingDate).toDateString()
+
   const date = moment(bookingDate).format("LLLL").split(" ");
   const day = date[0];
   const month = date[1];
@@ -37,7 +40,6 @@ const PaymentPage = () => {
   //handle get payment method
   const [paymentMethod, setPaymentMethod] = React.useState(null);
   const [selectPaymentMethod, setSelectPaymentMethod] = React.useState(null);
-  // console.log(paymentMethod)
 
   const getPaymentMethod = async () => {
     try {
@@ -109,7 +111,7 @@ const PaymentPage = () => {
     try {
       const response = await http(token).post("/transaction/orderTransaction", {
         userId,
-        bookingDate,
+        bookingDate: booksDate,
         movieId,
         cinemaId,
         movieSchedulesId,
@@ -118,7 +120,7 @@ const PaymentPage = () => {
         phoneNUm: getProfile.phoneNUm,
         statusId: 1,
         paymentMethodId: selectPaymentMethod,
-        seatNum,
+        seatNum: seatNums,
         time,
         totalPrice,
       });
