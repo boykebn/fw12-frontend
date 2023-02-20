@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+<div align="center">
+  <br>
+  <h1><strong>Eastick</strong></h1>
+  <p>Cinema ticket booking website</p>
+  <p>View the Web App (https://fw12-frontend-rose.vercel.app/)</p>
+</div>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
+**Eastick** is a Cinema ticket booking website. Here, the user can create a new account, log in, see what films are currently showing and what films will be coming, order tickets according to the film, cinema and also the date chosen by the user.
 
-## Available Scripts
+## Preview
+<div>
+   <img src="https://res.cloudinary.com/dqpdyp1gw/image/upload/v1676880816/for%20readme%20github/Screenshot_20230220_150647_svhfcs.png" width="600" />
+   <img src="https://res.cloudinary.com/dqpdyp1gw/image/upload/v1676880819/for%20readme%20github/Screenshot_20230220_150708_pr0l4u.png" width="600" />
+   <img src="https://res.cloudinary.com/dqpdyp1gw/image/upload/v1676880817/for%20readme%20github/Screenshot_20230220_150656_lqbkxx.png" width="600" />
+ </div>
+ 
+ ## Technologies
+-   [React.js](https://reactjs.org/)
+-   [TailwindCSS](https://tailwindcss.com/)
+-   [Redux](https://redux-toolkit.js.org/)
+-   [daisyUI](https://daisyui.com/)
+-   [Formik](https://formik.org/)
+-   [Vercel](https://vercel.com/)
 
-In the project directory, you can run:
+## Installing and run App
+To install Eastick Web project, please follow these steps:
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. clone the repo to your local, can use :
+```
+git clone https://github.com/boykebn/fw12-frontend
+```
+2. Open the cloned file in the code editor you have
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+3. Install the dependencies, can use :
+```
+npm install
+```
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+4. Run the app using :
+```
+npm run start
+```
