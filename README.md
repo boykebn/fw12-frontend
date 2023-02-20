@@ -1,6 +1,6 @@
 <div align="center">
   <br>
-  <h1><strong>Eastick</strong></h1>
+  <h1><strong>Eastick Web App</strong></h1>
   <p>Cinema ticket booking website</p>
   <p>View the Web App (https://fw12-frontend-rose.vercel.app/)</p>
 </div>
