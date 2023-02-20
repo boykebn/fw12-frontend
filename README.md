@@ -42,3 +42,5 @@ npm install
 ```
 npm run start
 ```
+## Deploy on
+[Vercel](https://vercel.com/)
